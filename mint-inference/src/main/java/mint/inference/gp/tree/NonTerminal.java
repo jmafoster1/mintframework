@@ -135,8 +135,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	private void mutateByRandomChangeOfChild(Generator g) {
 		if (!this.children.isEmpty()) {
 			Node<?> child = this.getChild(g.getRandom().nextInt(this.children.size()));
-			if (child.getReturnType() == this.getReturnType())
-				child.swapWith(g.generateRandomTerminal(this.getReturnType()));
+			child.swapWith(g.generateRandomTerminal(child.getReturnType()));
 		}
 	}
 

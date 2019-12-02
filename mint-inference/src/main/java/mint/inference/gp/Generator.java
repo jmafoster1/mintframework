@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.microsoft.z3.Context;
 
@@ -121,30 +120,47 @@ public class Generator {
 	}
 
 	public List<Chromosome> generateBooleanPopulation(int size, int maxD) {
-		List<Chromosome> population = IntStream.range(0, size).mapToObj(i -> generateRandomBooleanExpression(maxD + 1))
-				.collect(Collectors.toList());
+		List<Chromosome> population = new ArrayList<Chromosome>();
+		for (int i = 0; i < size; i++) {
+			Chromosome instance = generateRandomBooleanExpression(maxD + 1);
+			// We want to make sure the initial population is filled with unique individuals
+			// if we can. If there are no nonterminals then we can't do this.
+			if (!bFunctions.isEmpty()) {
+				while (populationContains(population, instance)) {
+					instance = generateRandomBooleanExpression(maxD + 1);
+				}
+			}
+			population.add(instance);
+		}
 		return population;
 	}
 
 	public List<Chromosome> generateDoublePopulation(int size, int maxD) {
-		List<Chromosome> population = IntStream.range(0, size).mapToObj(i -> generateRandomDoubleExpression(maxD + 1))
-				.collect(Collectors.toList());
+		List<Chromosome> population = new ArrayList<Chromosome>();
+		for (int i = 0; i < size; i++) {
+			Chromosome instance = generateRandomDoubleExpression(maxD + 1);
+			// We want to make sure the initial population is filled with unique individuals
+			// if we can. If there are no nonterminals then we can't do this.
+			if (!dFunctions.isEmpty()) {
+				while (populationContains(population, instance)) {
+					instance = generateRandomDoubleExpression(maxD + 1);
+				}
+			}
+			population.add(instance);
+		}
 		return population;
 	}
 
 	public List<Chromosome> generateIntegerPopulation(int size, int maxD) {
 		List<Chromosome> population = new ArrayList<Chromosome>();
 		for (int i = 0; i < size; i++) {
-			Chromosome instance;
+			Chromosome instance = generateRandomIntegerExpression(maxD + 1);
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
-			if (!iFunctions.isEmpty()) {
-				do {
+			if (!bFunctions.isEmpty()) {
+				while (populationContains(population, instance)) {
 					instance = generateRandomIntegerExpression(maxD + 1);
-
-				} while (populationContains(population, instance));
-			} else {
-				instance = generateRandomIntegerExpression(maxD + 1);
+				}
 			}
 			population.add(instance);
 		}
@@ -154,7 +170,15 @@ public class Generator {
 	public List<Chromosome> generateStringPopulation(int size, int maxD) {
 		List<Chromosome> population = new ArrayList<Chromosome>();
 		for (int i = 0; i < size; i++) {
-			population.add(generateRandomStringExpression(maxD + 1));
+			Chromosome instance = generateRandomStringExpression(maxD + 1);
+			// We want to make sure the initial population is filled with unique individuals
+			// if we can. If there are no nonterminals then we can't do this.
+			if (!bFunctions.isEmpty()) {
+				while (populationContains(population, instance)) {
+					instance = generateRandomStringExpression(maxD + 1);
+				}
+			}
+			population.add(instance);
 		}
 		return population;
 	}
@@ -276,4 +300,5 @@ public class Generator {
 		}
 		throw new IllegalArgumentException("Datatype must be one of BOOLEAN, STRING, INTEGER, or DOUBLE");
 	}
+
 }
