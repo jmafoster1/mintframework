@@ -36,7 +36,7 @@ public class SRPlayground {
 
 		List<VariableTerminal<?>> intTerms = new ArrayList<VariableTerminal<?>>();
 		intTerms.add(new IntegerVariableAssignmentTerminal("i0", false));
-		intTerms.add(new IntegerVariableAssignmentTerminal("r2", true));
+		intTerms.add(new IntegerVariableAssignmentTerminal("r1", true));
 		intTerms.add(new IntegerVariableAssignmentTerminal(0));
 		intTerms.add(new IntegerVariableAssignmentTerminal(50));
 		intTerms.add(new IntegerVariableAssignmentTerminal(100));
