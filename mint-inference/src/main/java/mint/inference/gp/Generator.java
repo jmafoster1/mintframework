@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.microsoft.z3.Context;
-
 import mint.inference.evo.Chromosome;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
@@ -193,26 +191,22 @@ public class Generator {
 
 	@SuppressWarnings("unchecked")
 	public Node<DoubleVariableAssignment> generateRandomDoubleExpression(int maxD) {
-		return (Node<DoubleVariableAssignment>) generateRandomExpression(maxD, dFunctions, dTerminals).simp();
+		return (Node<DoubleVariableAssignment>) generateRandomExpression(maxD, dFunctions, dTerminals);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Node<StringVariableAssignment> generateRandomStringExpression(int maxD) {
-		return (Node<StringVariableAssignment>) generateRandomExpression(maxD, sFunctions, sTerminals).simp();
+		return (Node<StringVariableAssignment>) generateRandomExpression(maxD, sFunctions, sTerminals);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Node<IntegerVariableAssignment> generateRandomIntegerExpression(int maxD) {
-		return (Node<IntegerVariableAssignment>) generateRandomExpression(maxD, iFunctions, iTerminals).simp();
+		return (Node<IntegerVariableAssignment>) generateRandomExpression(maxD, iFunctions, iTerminals);
 	}
 
 	@SuppressWarnings("unchecked")
 	public Node<BooleanVariableAssignment> generateRandomBooleanExpression(int maxD) {
-		Node<BooleanVariableAssignment> individual = (Node<BooleanVariableAssignment>) generateRandomExpression(maxD,
-				bFunctions, bTerminals);
-		Context ctx = new Context();
-		ctx.close();
-		return individual.simp();
+		return (Node<BooleanVariableAssignment>) generateRandomExpression(maxD, bFunctions, bTerminals);
 	}
 
 	public NonTerminal<StringVariableAssignment> generateAssignment() {
