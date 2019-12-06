@@ -205,7 +205,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 
 		}
 
-		return fittest;
+		return fittest.simp();
 	}
 
 }

@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import mint.inference.evo.GPConfiguration;
 import mint.inference.gp.Generator;
-import mint.inference.gp.SingleOutputGP;
+import mint.inference.gp.LatentVariableGP;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.booleans.AndBooleanOperator;
@@ -34,7 +34,11 @@ public class GuardSRPlayground {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
-		Generator gpGenerator = new Generator(new Random(0));
+		long seed = System.currentTimeMillis();
+
+		System.out.println("Seed: " + seed);
+
+		Generator gpGenerator = new Generator(new Random(seed));
 
 		// Boolean terminals
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
@@ -92,11 +96,11 @@ public class GuardSRPlayground {
 
 		System.out.println(trainingSet);
 
-		SingleOutputGP gp = new SingleOutputGP(gpGenerator, trainingSet, new GPConfiguration(20, 0.95f, 0.05f, 7, 7),
-				false);
+		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet,
+				new GPConfiguration(20, 0.95f, 0.05f, 7, 7));
 
 		Node<?> best = (Node<?>) gp.evolve(100);
-		System.out.println(best);
+		System.out.println(best + ":" + best.getFitness());
 		System.out.println(best.simp());
 		System.out.println(gp.isCorrect(best));
 	}

@@ -202,6 +202,10 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		Set<String> totalUsedVars = individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet());
 		totalVars.removeAll(totalUsedVars);
 
-		return Arrays.asList((double) totalVars.size(), (double) individual.size());
+		return Arrays.asList(
+//				I can't remember why I put this in here.
+//				Maybe it was before I got the simplification properly working...
+//				(double) totalVars.size(), 
+				(double) individual.size());
 	}
 }

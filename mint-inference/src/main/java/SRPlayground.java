@@ -27,7 +27,12 @@ public class SRPlayground {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
-		Generator gpGenerator = new Generator(new Random(1));
+		long seed = System.currentTimeMillis();
+
+//		seed = 1575651767134L;
+		System.out.println("Seed: " + seed);
+
+		Generator gpGenerator = new Generator(new Random(seed));
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		intNonTerms.add(new AddIntegersOperator());
@@ -35,27 +40,37 @@ public class SRPlayground {
 		gpGenerator.setIntegerFunctions(intNonTerms);
 
 		List<VariableTerminal<?>> intTerms = new ArrayList<VariableTerminal<?>>();
+
 		intTerms.add(new IntegerVariableAssignmentTerminal("i0", false));
 		intTerms.add(new IntegerVariableAssignmentTerminal("r1", true));
-		intTerms.add(new IntegerVariableAssignmentTerminal(0));
-		intTerms.add(new IntegerVariableAssignmentTerminal(50));
-		intTerms.add(new IntegerVariableAssignmentTerminal(100));
+
+		for (int i : new int[] { 0, 1, 50, 10, 20, 100, 30, 70 })
+			intTerms.add(new IntegerVariableAssignmentTerminal(i));
+
 		gpGenerator.setIntegerTerminals(intTerms);
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 
-		List<VariableAssignment<?>> s1 = new ArrayList<VariableAssignment<?>>();
-		s1.add(new IntegerVariableAssignment("i0", 50));
+		List<VariableAssignment<?>> i10 = new ArrayList<VariableAssignment<?>>();
+		i10.add(new IntegerVariableAssignment("i0", 10));
 
-		List<VariableAssignment<?>> s2 = new ArrayList<VariableAssignment<?>>();
-		s2.add(new IntegerVariableAssignment("i0", 50));
+		List<VariableAssignment<?>> i20 = new ArrayList<VariableAssignment<?>>();
+		i20.add(new IntegerVariableAssignment("i0", 20));
 
-		List<VariableAssignment<?>> s3 = new ArrayList<VariableAssignment<?>>();
-		s3.add(new IntegerVariableAssignment("i0", 100));
+		List<VariableAssignment<?>> i50 = new ArrayList<VariableAssignment<?>>();
+		i50.add(new IntegerVariableAssignment("i0", 50));
 
-		trainingSet.put(s1, new IntegerVariableAssignment("o1", 50));
-		trainingSet.put(s2, new IntegerVariableAssignment("o1", 100));
-		trainingSet.put(s3, new IntegerVariableAssignment("o1", 100));
+		List<VariableAssignment<?>> i100 = new ArrayList<VariableAssignment<?>>();
+		i100.add(new IntegerVariableAssignment("i0", 100));
+
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 50));
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 100));
+		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100));
+
+		trainingSet.put(i10, new IntegerVariableAssignment("o1", 10));
+		trainingSet.put(i20, new IntegerVariableAssignment("o1", 30));
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 70));
+		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100));
 
 		System.out.println("Training set: " + trainingSet);
 		System.out.println("IntTerms: " + intTerms);
@@ -71,6 +86,7 @@ public class SRPlayground {
 		Node<?> best = (Node<?>) gp.evolve(100);
 		System.out.println(best + ": " + best.getFitness());
 		System.out.println("correct? " + gp.isCorrect(best));
+		System.out.println(best.simp());
 
 //		System.out.println();
 //		for (Chromosome c1 : gp.getPopulation()) {

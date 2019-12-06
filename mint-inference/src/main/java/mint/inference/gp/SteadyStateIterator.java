@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
@@ -210,6 +211,8 @@ public class SteadyStateIterator extends AbstractIterator {
 		}
 
 		gp.evaluatePopulation(newPopulation);
+
+		newPopulation = newPopulation.stream().map(c -> c.simp()).collect(Collectors.toList());
 
 		newPopulation = gp.removeDuplicates(newPopulation);
 		Collections.sort(newPopulation);
