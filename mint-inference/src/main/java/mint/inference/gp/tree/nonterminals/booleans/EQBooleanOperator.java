@@ -27,8 +27,8 @@ public class EQBooleanOperator extends BooleanNonTerminal {
 
 	@Override
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new EQBooleanOperator(g.generateRandomBooleanExpression(depth),
-				g.generateRandomBooleanExpression(depth));
+		return new EQBooleanOperator(g.generateRandomExpression(depth, Datatype.BOOLEAN),
+				g.generateRandomExpression(depth, Datatype.BOOLEAN));
 	}
 
 	@Override

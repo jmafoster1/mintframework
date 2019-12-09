@@ -35,9 +35,11 @@ public class SubtractIntegersOperator extends IntegerNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<IntegerVariableAssignment> createInstance(Generator g, int depth) {
-		SubtractIntegersOperator sdo = new SubtractIntegersOperator(g.generateRandomIntegerExpression(depth),
-				g.generateRandomIntegerExpression(depth));
+		SubtractIntegersOperator sdo = new SubtractIntegersOperator(
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER),
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER));
 		sdo.setResVar(copyResVar());
 		return sdo;
 	}

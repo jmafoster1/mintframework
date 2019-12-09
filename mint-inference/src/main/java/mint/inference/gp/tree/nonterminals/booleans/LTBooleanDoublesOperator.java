@@ -31,9 +31,11 @@ public class LTBooleanDoublesOperator extends BooleanNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new LTBooleanDoublesOperator(g.generateRandomDoubleExpression(depth),
-				g.generateRandomDoubleExpression(depth));
+		return new LTBooleanDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE),
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 	}
 
 	@Override

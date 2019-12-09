@@ -28,8 +28,8 @@ public class AndBooleanOperator extends BooleanNonTerminal {
 
 	@Override
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new AndBooleanOperator(g.generateRandomBooleanExpression(depth),
-				g.generateRandomBooleanExpression(depth));
+		return new AndBooleanOperator(g.generateRandomExpression(depth, Datatype.BOOLEAN),
+				g.generateRandomExpression(depth, Datatype.BOOLEAN));
 	}
 
 	@Override

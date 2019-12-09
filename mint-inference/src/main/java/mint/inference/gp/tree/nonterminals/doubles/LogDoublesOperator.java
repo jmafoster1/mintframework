@@ -33,8 +33,10 @@ public class LogDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		LogDoublesOperator ldo = new LogDoublesOperator(g.generateRandomDoubleExpression(depth));
+		LogDoublesOperator ldo = new LogDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		ldo.setResVar(copyResVar());
 		return ldo;
 	}

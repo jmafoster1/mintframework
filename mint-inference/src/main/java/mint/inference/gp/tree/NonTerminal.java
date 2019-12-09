@@ -57,23 +57,6 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		child.setParent(this);
 	}
 
-//	@Override
-//	public void mutate(Generator g, int depth) {
-//		// subtree-mutation
-//		int childPos = g.getRandom().nextInt(children.size());
-//		Node<?> child = children.get(childPos);
-//		if (child.getType().equals("boolean")) {
-//			child = g.generateRandomBooleanExpression(depth - 1);
-//		} else if (child.getType().equals("double")) {
-//			child = g.generateRandomDoubleExpression(depth - 1);
-//		} else if (child.getType().equals("integer")) {
-//			child = g.generateRandomIntegerExpression(depth - 1);
-//		} else {
-//			child = g.generateRandomStringExpression(depth - 1);
-//		}
-//		children.set(childPos, child);
-//	}
-
 	@Override
 	protected List<Node<?>> getAllNodesAsList() {
 		List<Node<?>> nodes = new ArrayList<Node<?>>();
@@ -98,13 +81,15 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		int type = g.getRandom().nextInt(6);
 		switch (type) {
 		case 0:
+			// HVL SUB
 			mutateByRandomChangeOfFunction(g);
 			break;
 		case 1:
-			mutateByRandomChangeOfChild(g);
+			mutateByDeletion(g);
 			break;
 		case 2:
-			mutateByRootGrowth(g);
+			// HVL ADD
+			mutateByGrowth(g);
 			break;
 		case 3:
 			// Reverse children if they have the same return type, e.g. (x - y) -> (y - x)
@@ -112,6 +97,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 				Collections.reverse(this.children);
 			break;
 		case 4:
+			// HVL DEL
 			mutateByRandomChangeOfNodeToChild(g);
 			break;
 		case 5:
@@ -122,9 +108,6 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	}
 
 	private void mutateByRandomChangeOfFunction(Generator g) {
-		// Sometimes this will generate expressions which don't type check
-		// I guess that's OK because they'll get weeded out quietly
-		// Ideally I'd like to always make functions which type check
 		if (!g.nonTerms(this.getReturnType()).isEmpty()) {
 			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(this.typeSignature());
 			newFun.setChildren(this.children);
@@ -132,25 +115,26 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		}
 	}
 
-	private void mutateByRandomChangeOfChild(Generator g) {
+	private void mutateByDeletion(Generator g) {
 		if (!this.children.isEmpty()) {
 			Node<?> child = this.getChild(g.getRandom().nextInt(this.children.size()));
 			child.swapWith(g.generateRandomTerminal(child.getReturnType()));
 		}
 	}
 
-	private void mutateByRootGrowth(Generator g) {
+	private void mutateByGrowth(Generator g) {
 		if (!g.nonTerms(this.getReturnType()).isEmpty()) {
-			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(this.typeSignature());
+			Node<?> mutationPoint = this.getRandomNode(g);
+			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint.typeSignature());
 			boolean thisAdded = false;
 			for (Datatype type : newRoot.typeSignature()) {
-				if (type == this.getReturnType() && !thisAdded) {
-					newRoot.addChild(this.copy());
+				if (type == mutationPoint.getReturnType() && !thisAdded) {
+					newRoot.addChild(mutationPoint.copy());
 					thisAdded = true;
 				} else
 					newRoot.addChild(g.generateRandomTerminal(type));
 			}
-			this.swapWith(newRoot);
+			mutationPoint.swapWith(newRoot);
 		}
 	}
 

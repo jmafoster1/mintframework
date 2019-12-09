@@ -98,4 +98,6 @@ public abstract class AbstractEvo {
 
 	public abstract void evaluatePopulation(List<Chromosome> pop);
 
+	public abstract Collection<? extends Chromosome> generatePopulation(int remainder, List<Chromosome> newPopulation);
+
 }

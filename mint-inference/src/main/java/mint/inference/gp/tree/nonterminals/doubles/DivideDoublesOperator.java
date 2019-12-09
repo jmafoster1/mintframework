@@ -48,9 +48,11 @@ public class DivideDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		DivideDoublesOperator ddo = new DivideDoublesOperator(g.generateRandomDoubleExpression(depth),
-				g.generateRandomDoubleExpression(depth));
+		DivideDoublesOperator ddo = new DivideDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE),
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		ddo.setResVar(copyResVar());
 		return ddo;
 	}

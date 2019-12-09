@@ -27,7 +27,8 @@ public class EQStringOperator extends BooleanNonTerminal {
 
 	@Override
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new EQStringOperator(g.generateRandomStringExpression(depth), g.generateRandomStringExpression(depth));
+		return new EQStringOperator(g.generateRandomExpression(depth, Datatype.STRING),
+				g.generateRandomExpression(depth, Datatype.STRING));
 	}
 
 	@Override

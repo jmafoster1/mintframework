@@ -35,9 +35,11 @@ public class PwrDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		PwrDoublesOperator pdo = new PwrDoublesOperator(g.generateRandomDoubleExpression(depth),
-				g.generateRandomDoubleExpression(depth));
+		PwrDoublesOperator pdo = new PwrDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE),
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		pdo.setResVar(copyResVar());
 		return pdo;
 	}

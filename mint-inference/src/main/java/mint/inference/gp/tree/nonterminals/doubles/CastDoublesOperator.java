@@ -26,8 +26,10 @@ public class CastDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		DoubleNonTerminal created = new CastDoublesOperator(g.generateRandomIntegerExpression(depth));
+		DoubleNonTerminal created = new CastDoublesOperator(
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER));
 		created.setResVar(copyResVar());
 		return created;
 	}

@@ -32,8 +32,8 @@ public class OrBooleanOperator extends BooleanNonTerminal {
 
 	@Override
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new OrBooleanOperator(g.generateRandomBooleanExpression(depth),
-				g.generateRandomBooleanExpression(depth));
+		return new OrBooleanOperator(g.generateRandomExpression(depth, Datatype.BOOLEAN),
+				g.generateRandomExpression(depth, Datatype.BOOLEAN));
 	}
 
 	@Override

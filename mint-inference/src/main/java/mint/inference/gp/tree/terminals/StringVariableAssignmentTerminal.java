@@ -36,7 +36,7 @@ public class StringVariableAssignmentTerminal extends VariableTerminal<StringVar
 		int random = 0;
 		if (depth > 0)
 			random = g.getRandom().nextInt(depth);
-		swapWith(g.generateRandomStringExpression(random));
+		swapWith(g.generateRandomExpression(random, Datatype.STRING));
 	}
 
 	@Override

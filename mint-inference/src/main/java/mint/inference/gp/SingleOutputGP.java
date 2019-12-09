@@ -28,6 +28,7 @@ import mint.inference.gp.tree.Node;
 import mint.tracedata.types.BooleanVariableAssignment;
 import mint.tracedata.types.DoubleVariableAssignment;
 import mint.tracedata.types.IntegerVariableAssignment;
+import mint.tracedata.types.ListVariableAssignment;
 import mint.tracedata.types.StringVariableAssignment;
 import mint.tracedata.types.VariableAssignment;
 
@@ -63,18 +64,20 @@ public class SingleOutputGP extends GP<VariableAssignment<?>> {
 	}
 
 	@Override
-	protected String getType() {
+	protected Datatype getType() {
 		VariableAssignment<?> var = evals.values().iterator().next();
 		if (var instanceof StringVariableAssignment)
-			return "String";
+			return Datatype.STRING;
 		else if (var instanceof DoubleVariableAssignment)
-			return "Double";
+			return Datatype.DOUBLE;
 		else if (var instanceof IntegerVariableAssignment)
-			return "Integer";
+			return Datatype.INTEGER;
 		else if (var instanceof BooleanVariableAssignment)
-			return "Boolean";
+			return Datatype.BOOLEAN;
+		else if (var instanceof ListVariableAssignment)
+			return Datatype.LIST;
 		else
-			return "List";
+			throw new IllegalStateException("Cannot determine the type of " + var.getClass().getName());
 	}
 
 	@Override

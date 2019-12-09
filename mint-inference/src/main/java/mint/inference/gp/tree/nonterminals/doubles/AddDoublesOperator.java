@@ -50,9 +50,11 @@ public class AddDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		DoubleNonTerminal created = new AddDoublesOperator(g.generateRandomDoubleExpression(depth),
-				g.generateRandomDoubleExpression(depth));
+		DoubleNonTerminal created = new AddDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE),
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		created.setResVar(copyResVar());
 		return created;
 	}

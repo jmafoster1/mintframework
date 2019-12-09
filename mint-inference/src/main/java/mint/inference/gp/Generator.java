@@ -9,13 +9,8 @@ import mint.inference.evo.Chromosome;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
-import mint.inference.gp.tree.nonterminals.lists.RootListNonTerminal;
 import mint.inference.gp.tree.nonterminals.strings.AssignmentOperator;
 import mint.inference.gp.tree.terminals.VariableTerminal;
-import mint.tracedata.types.BooleanVariableAssignment;
-import mint.tracedata.types.DoubleVariableAssignment;
-import mint.tracedata.types.IntegerVariableAssignment;
-import mint.tracedata.types.StringVariableAssignment;
 import mint.tracedata.types.VariableAssignment;
 
 /**
@@ -100,8 +95,9 @@ public class Generator {
 	 * return selectRandomNonTerminal(nonTerms, maxD); }
 	 */
 
-	public Chromosome generateRandomExpression(int maxD, List<NonTerminal<?>> nonTerms,
-			List<VariableTerminal<?>> terms) {
+	public Node<?> generateRandomExpressionAux(int maxD, Datatype type) {
+		List<NonTerminal<?>> nonTerms = nonTerms(type);
+		List<VariableTerminal<?>> terms = terms(type);
 		if (nonTerms.isEmpty() || maxD < 2) {
 			return selectRandomTerminal(terms);
 		} else {
@@ -113,19 +109,25 @@ public class Generator {
 		}
 	}
 
+	// We need this function to simplify the top-level expression. Doing it within
+	// generateRandomExpressionAux simplifies the child expressions only
+	public Node<?> generateRandomExpression(int maxD, Datatype type) {
+		return generateRandomExpressionAux(maxD, type).simp();
+	}
+
 	public boolean populationContains(List<Chromosome> population, Chromosome c1) {
 		return population.stream().anyMatch(c2 -> c1.sameSyntax(c2));
 	}
 
-	public List<Chromosome> generateBooleanPopulation(int size, int maxD) {
+	public List<Chromosome> generatePopulation(int size, int maxD, Datatype type) {
 		List<Chromosome> population = new ArrayList<Chromosome>();
 		for (int i = 0; i < size; i++) {
-			Chromosome instance = generateRandomBooleanExpression(maxD + 1);
+			Chromosome instance = generateRandomExpression(maxD + 1, type);
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
-			if (!bFunctions.isEmpty()) {
+			if (!nonTerms(type).isEmpty()) {
 				while (populationContains(population, instance)) {
-					instance = generateRandomBooleanExpression(maxD + 1);
+					instance = generateRandomExpression(maxD + 1, type);
 				}
 			}
 			population.add(instance);
@@ -133,106 +135,27 @@ public class Generator {
 		return population;
 	}
 
-	public List<Chromosome> generateDoublePopulation(int size, int maxD) {
+	public List<Chromosome> generatePopulation(int size, int maxD, Datatype type, List<Chromosome> existing) {
 		List<Chromosome> population = new ArrayList<Chromosome>();
 		for (int i = 0; i < size; i++) {
-			Chromosome instance = generateRandomDoubleExpression(maxD + 1);
+			Chromosome instance = generateRandomExpression(maxD + 1, type);
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
-			if (!dFunctions.isEmpty()) {
-				while (populationContains(population, instance)) {
-					instance = generateRandomDoubleExpression(maxD + 1);
+			if (!nonTerms(type).isEmpty()) {
+				while (populationContains(population, instance) || populationContains(existing, instance)) {
+					instance = generateRandomExpression(maxD + 1, type);
 				}
 			}
 			population.add(instance);
 		}
 		return population;
 	}
-
-	public List<Chromosome> generateIntegerPopulation(int size, int maxD) {
-		List<Chromosome> population = new ArrayList<Chromosome>();
-		for (int i = 0; i < size; i++) {
-			Chromosome instance = generateRandomIntegerExpression(maxD + 1);
-			// We want to make sure the initial population is filled with unique individuals
-			// if we can. If there are no nonterminals then we can't do this.
-			if (!bFunctions.isEmpty()) {
-				while (populationContains(population, instance)) {
-					instance = generateRandomIntegerExpression(maxD + 1);
-				}
-			}
-			population.add(instance);
-		}
-		return population;
-	}
-
-	public List<Chromosome> generateStringPopulation(int size, int maxD) {
-		List<Chromosome> population = new ArrayList<Chromosome>();
-		for (int i = 0; i < size; i++) {
-			Chromosome instance = generateRandomStringExpression(maxD + 1);
-			// We want to make sure the initial population is filled with unique individuals
-			// if we can. If there are no nonterminals then we can't do this.
-			if (!bFunctions.isEmpty()) {
-				while (populationContains(population, instance)) {
-					instance = generateRandomStringExpression(maxD + 1);
-				}
-			}
-			population.add(instance);
-		}
-		return population;
-	}
-
-	/*
-	 * public Chromosome generate(String type, int maxD){ if(type.equals("String"))
-	 * return generateRandomStringExpression(maxD); else if(type.equals("Double"))
-	 * return generateRandomDoubleExpression(maxD); else if(type.equals("Integer"))
-	 * return generateRandomIntegerExpression(maxD); else if(type.equals("Boolean"))
-	 * return generateRandomBooleanExpression(maxD); else return null; }
-	 */
-
-	@SuppressWarnings("unchecked")
-	public Node<DoubleVariableAssignment> generateRandomDoubleExpression(int maxD) {
-		return (Node<DoubleVariableAssignment>) generateRandomExpression(maxD, dFunctions, dTerminals);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Node<StringVariableAssignment> generateRandomStringExpression(int maxD) {
-		return (Node<StringVariableAssignment>) generateRandomExpression(maxD, sFunctions, sTerminals);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Node<IntegerVariableAssignment> generateRandomIntegerExpression(int maxD) {
-		return (Node<IntegerVariableAssignment>) generateRandomExpression(maxD, iFunctions, iTerminals);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Node<BooleanVariableAssignment> generateRandomBooleanExpression(int maxD) {
-		return (Node<BooleanVariableAssignment>) generateRandomExpression(maxD, bFunctions, bTerminals);
-	}
-
-	public NonTerminal<StringVariableAssignment> generateAssignment() {
-		return aop.createInstance(this, 0);
-	}
-
-	/*
-	 * private Chromosome selectRandomNonTerminal(List<NonTerminal<?>> nodes, int
-	 * depth) { int index = rand.nextInt(nodes.size()); NonTerminal<?> selected =
-	 * nodes.get(index); return selected.createInstance(this,depth-1); }
-	 */
 
 	public Node<? extends VariableAssignment<?>> selectRandomTerminal(List<VariableTerminal<?>> nodes) {
 		int index = rand.nextInt(nodes.size());
 		VariableTerminal<?> selected = nodes.get(index);
 
 		return selected.copy();
-	}
-
-	public List<Chromosome> generateListPopulation(int size, int maxD, String typeString) {
-		List<Chromosome> population = new ArrayList<Chromosome>();
-		for (int i = 0; i < size; i++) {
-			RootListNonTerminal rs = new RootListNonTerminal(typeString);
-			population.add(rs.createInstance(this, maxD));
-		}
-		return population;
 	}
 
 	public List<NonTerminal<?>> nonTerms(Datatype s) {
@@ -245,6 +168,22 @@ public class Generator {
 			return this.bFunctions;
 		case STRING:
 			return this.sFunctions;
+		default:
+			break;
+		}
+		throw new IllegalArgumentException("Invaild type " + s);
+	}
+
+	public List<VariableTerminal<?>> terms(Datatype s) {
+		switch (s) {
+		case INTEGER:
+			return this.iTerminals;
+		case DOUBLE:
+			return this.dTerminals;
+		case BOOLEAN:
+			return this.bTerminals;
+		case STRING:
+			return this.sTerminals;
 		default:
 			break;
 		}

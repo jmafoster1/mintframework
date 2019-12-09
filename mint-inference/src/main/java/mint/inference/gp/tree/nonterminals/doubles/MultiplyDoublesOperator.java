@@ -38,9 +38,11 @@ public class MultiplyDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		MultiplyDoublesOperator mdo = new MultiplyDoublesOperator(g.generateRandomDoubleExpression(depth),
-				g.generateRandomDoubleExpression(depth));
+		MultiplyDoublesOperator mdo = new MultiplyDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE),
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		mdo.setResVar(copyResVar());
 		return mdo;
 	}

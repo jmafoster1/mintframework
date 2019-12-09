@@ -31,9 +31,11 @@ public class GTBooleanIntegersOperator extends BooleanNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new GTBooleanIntegersOperator(g.generateRandomIntegerExpression(depth),
-				g.generateRandomIntegerExpression(depth));
+		return new GTBooleanIntegersOperator(
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER),
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER));
 	}
 
 	@Override

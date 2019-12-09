@@ -47,9 +47,11 @@ public class MultiplyIntegersOperator extends IntegerNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<IntegerVariableAssignment> createInstance(Generator g, int depth) {
-		IntegerNonTerminal created = new MultiplyIntegersOperator(g.generateRandomIntegerExpression(depth),
-				g.generateRandomIntegerExpression(depth));
+		IntegerNonTerminal created = new MultiplyIntegersOperator(
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER),
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER));
 		created.setResVar(copyResVar());
 		return created;
 	}

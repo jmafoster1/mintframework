@@ -27,7 +27,7 @@ public class NotBooleanOperator extends BooleanNonTerminal {
 
 	@Override
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new NotBooleanOperator(g.generateRandomBooleanExpression(depth));
+		return new NotBooleanOperator(g.generateRandomExpression(depth, Datatype.BOOLEAN));
 	}
 
 	@Override

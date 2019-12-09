@@ -52,9 +52,9 @@ public class DoubleVariableAssignmentTerminal extends VariableTerminal<DoubleVar
 			terminal.setToRandom();
 		} else if (!this.isConstant()) {
 			if (depth == 0)
-				swapWith(g.generateRandomDoubleExpression(1));
+				swapWith(g.generateRandomExpression(1, Datatype.DOUBLE));
 			else
-				swapWith(g.generateRandomDoubleExpression(g.getRandom().nextInt(depth)));
+				swapWith(g.generateRandomExpression(g.getRandom().nextInt(depth), Datatype.DOUBLE));
 
 		}
 	}

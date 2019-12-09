@@ -62,7 +62,7 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 			int limit = depth;
 			if (limit == 0)
 				limit++;
-			swapWith(g.generateRandomIntegerExpression(g.getRandom().nextInt(limit)));
+			swapWith(g.generateRandomExpression(g.getRandom().nextInt(limit), Datatype.INTEGER));
 		} else if (this.isConstant()) {
 			terminal.setToRandom();
 		}

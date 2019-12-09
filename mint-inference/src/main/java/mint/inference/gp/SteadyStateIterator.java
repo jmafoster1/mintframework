@@ -210,22 +210,27 @@ public class SteadyStateIterator extends AbstractIterator {
 			newPopulation.add(mutate(population.get(rand.nextInt(population.size()))));
 		}
 
-		gp.evaluatePopulation(newPopulation);
-
 		newPopulation = newPopulation.stream().map(c -> c.simp()).collect(Collectors.toList());
 
 		newPopulation = gp.removeDuplicates(newPopulation);
-		Collections.sort(newPopulation);
 
+		gp.evaluatePopulation(newPopulation);
+
+		// Sort by fitness and drop the worst if there's a surplus after removing
+		// duplicates
+		Collections.sort(newPopulation);
 		if (newPopulation.size() > gp.getGPConf().getPopulationSize())
 			newPopulation = newPopulation.subList(0, gp.getGPConf().getPopulationSize());
 
+		// Add in new random individuals if there's a deficit after removing duplicates
 		int remainder = gp.getGPConf().getPopulationSize() - newPopulation.size();
+
 		if (remainder > 0) {
-			newPopulation.addAll(gp.generatePopulation(remainder));
+			List<Chromosome> rest = new ArrayList<Chromosome>(gp.generatePopulation(remainder, newPopulation));
+			gp.evaluatePopulation(rest);
+			newPopulation.addAll(rest);
 		}
 
-		Collections.shuffle(newPopulation, rand);
 		return newPopulation;
 	}
 

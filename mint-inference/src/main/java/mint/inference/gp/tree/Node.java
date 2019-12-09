@@ -166,7 +166,6 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		try {
 			Expr z3Expr = this.toZ3(ctx).simplify();
 			Node<T> retVal = (Node<T>) NodeSimplifier.fromZ3(z3Expr);
-			retVal.setFitness(this.getFitness());
 			return retVal;
 		} catch (Exception e) {
 			return this;

@@ -26,9 +26,9 @@ public class BooleanVariableAssignmentTerminal extends VariableTerminal<BooleanV
 	@Override
 	public void mutate(Generator g, int depth) {
 		if (depth == 0)
-			swapWith(g.generateRandomBooleanExpression(1));
+			swapWith(g.generateRandomExpression(1, Datatype.BOOLEAN));
 		else
-			swapWith(g.generateRandomBooleanExpression(g.getRandom().nextInt(depth)));
+			swapWith(g.generateRandomExpression(g.getRandom().nextInt(depth), Datatype.BOOLEAN));
 	}
 
 	@Override

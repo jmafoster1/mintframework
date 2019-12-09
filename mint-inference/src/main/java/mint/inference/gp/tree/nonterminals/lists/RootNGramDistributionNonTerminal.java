@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mint.inference.gp.Generator;
+import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
 import mint.tracedata.readers.ngram.Ngrammer;
@@ -38,7 +39,7 @@ public class RootNGramDistributionNonTerminal extends RootListNonTerminal {
 	public NonTerminal<ListVariableAssignment> createInstance(Generator g, int depth) {
 		List<Node<?>> elements = new ArrayList<Node<?>>();
 		for (int i = 0; i < types.length(); i++) {
-			elements.add(g.generateRandomDoubleExpression(depth));
+			elements.add(g.generateRandomExpression(depth, Datatype.DOUBLE));
 		}
 		return new RootNGramDistributionNonTerminal(elements);
 	}

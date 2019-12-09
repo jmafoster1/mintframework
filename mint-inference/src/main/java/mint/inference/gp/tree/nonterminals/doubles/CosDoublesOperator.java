@@ -33,8 +33,10 @@ public class CosDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		CosDoublesOperator cdo = new CosDoublesOperator(g.generateRandomDoubleExpression(depth));
+		CosDoublesOperator cdo = new CosDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		cdo.setResVar(copyResVar());
 		return cdo;
 	}

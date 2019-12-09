@@ -7,6 +7,7 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
+import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.doubles.AddDoublesOperator;
@@ -43,7 +44,8 @@ public class GeneratorTester {
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("y", 4D), false, false));
 		gpGenerator.setDoubleTerminals(doubleTerms);
 
-		Node<DoubleVariableAssignment> exp = gpGenerator.generateRandomDoubleExpression(0);
+		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(0,
+				Datatype.DOUBLE);
 
 		System.out.println(exp);
 		System.out.println(exp.evaluate());
@@ -67,7 +69,8 @@ public class GeneratorTester {
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("y", 4D), false, false));
 		gpGenerator.setDoubleTerminals(doubleTerms);
 
-		Node<DoubleVariableAssignment> exp = gpGenerator.generateRandomDoubleExpression(11);
+		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(11,
+				Datatype.DOUBLE);
 
 		System.out.println(exp);
 		System.out.println(exp.evaluate());
@@ -96,7 +99,8 @@ public class GeneratorTester {
 		integerNonTerms.add(new CastIntegersOperator());
 		gpGenerator.setIntegerFunctions(integerNonTerms);
 
-		Node<DoubleVariableAssignment> exp = gpGenerator.generateRandomDoubleExpression(11);
+		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(11,
+				Datatype.DOUBLE);
 
 		System.out.println(exp);
 		System.out.println(exp.evaluate());

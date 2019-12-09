@@ -32,9 +32,11 @@ public class LTBooleanIntegersOperator extends BooleanNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new LTBooleanIntegersOperator(g.generateRandomIntegerExpression(depth),
-				g.generateRandomIntegerExpression(depth));
+		return new LTBooleanIntegersOperator(
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER),
+				(Node<IntegerVariableAssignment>) g.generateRandomExpression(depth, Datatype.INTEGER));
 	}
 
 	@Override

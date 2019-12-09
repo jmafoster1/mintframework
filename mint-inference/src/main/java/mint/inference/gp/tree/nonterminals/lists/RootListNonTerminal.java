@@ -45,11 +45,11 @@ public class RootListNonTerminal extends NonTerminal<ListVariableAssignment> {
 		for (int i = 0; i < types.length(); i++) {
 			char c = types.charAt(i);
 			if (c == 'd')
-				elements.add(g.generateRandomDoubleExpression(depth));
+				elements.add(g.generateRandomExpression(depth, Datatype.DOUBLE));
 			else if (c == 'i')
-				elements.add(g.generateRandomIntegerExpression(depth));
+				elements.add(g.generateRandomExpression(depth, Datatype.INTEGER));
 			else
-				elements.add(g.generateRandomBooleanExpression(depth));
+				elements.add(g.generateRandomExpression(depth, Datatype.BOOLEAN));
 		}
 		return new RootListNonTerminal(elements);
 	}

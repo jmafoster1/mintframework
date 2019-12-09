@@ -37,9 +37,11 @@ public class ConcatStringsOperator extends StringNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<StringVariableAssignment> createInstance(Generator g, int depth) {
-		return new ConcatStringsOperator(g.generateRandomStringExpression(depth),
-				g.generateRandomStringExpression(depth));
+		return new ConcatStringsOperator(
+				(Node<StringVariableAssignment>) g.generateRandomExpression(depth, Datatype.STRING),
+				(Node<StringVariableAssignment>) g.generateRandomExpression(depth, Datatype.STRING));
 	}
 
 	@Override

@@ -30,9 +30,12 @@ public class IfThenElseIntegerOperator extends NonTerminal<VariableAssignment<?>
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<VariableAssignment<?>> createInstance(Generator g, int depth) {
-		return new IfThenElseIntegerOperator(g.generateRandomBooleanExpression(depth),
-				g.generateRandomIntegerExpression(depth), g.generateRandomIntegerExpression(depth));
+		return new IfThenElseIntegerOperator(
+				(Node<BooleanVariableAssignment>) g.generateRandomExpression(depth, Datatype.BOOLEAN),
+				g.generateRandomExpression(depth, Datatype.INTEGER),
+				g.generateRandomExpression(depth, Datatype.INTEGER));
 	}
 
 	@Override

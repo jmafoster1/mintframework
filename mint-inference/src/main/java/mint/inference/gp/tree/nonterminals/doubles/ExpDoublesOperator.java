@@ -24,8 +24,10 @@ public class ExpDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public NonTerminal<DoubleVariableAssignment> createInstance(Generator g, int depth) {
-		ExpDoublesOperator edo = new ExpDoublesOperator(g.generateRandomDoubleExpression(depth));
+		ExpDoublesOperator edo = new ExpDoublesOperator(
+				(Node<DoubleVariableAssignment>) g.generateRandomExpression(depth, Datatype.DOUBLE));
 		edo.setResVar(copyResVar());
 		return edo;
 	}

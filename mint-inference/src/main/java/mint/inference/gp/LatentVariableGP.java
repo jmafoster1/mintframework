@@ -25,6 +25,7 @@ import mint.inference.gp.tree.Node;
 import mint.tracedata.types.BooleanVariableAssignment;
 import mint.tracedata.types.DoubleVariableAssignment;
 import mint.tracedata.types.IntegerVariableAssignment;
+import mint.tracedata.types.ListVariableAssignment;
 import mint.tracedata.types.StringVariableAssignment;
 import mint.tracedata.types.VariableAssignment;
 
@@ -53,18 +54,20 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 	}
 
 	@Override
-	protected String getType() {
+	protected Datatype getType() {
 		VariableAssignment<?> var = evals.values().iterator().next();
 		if (var instanceof StringVariableAssignment)
-			return "String";
+			return Datatype.STRING;
 		else if (var instanceof DoubleVariableAssignment)
-			return "Double";
+			return Datatype.DOUBLE;
 		else if (var instanceof IntegerVariableAssignment)
-			return "Integer";
+			return Datatype.INTEGER;
 		else if (var instanceof BooleanVariableAssignment)
-			return "Boolean";
+			return Datatype.BOOLEAN;
+		else if (var instanceof ListVariableAssignment)
+			return Datatype.LIST;
 		else
-			return "List";
+			throw new IllegalStateException("Cannot determine the type of " + var.getClass().getName());
 	}
 
 	@Override
@@ -128,17 +131,13 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 			best = (Node<?>) pop.get(0);
 		else
 			best = fittest;
-//		System.out.println("                 Best: " + best + " Best Fitness: " + best.getFitness());
 		for (Chromosome c : pop) {
 			Node<?> node = (Node<?>) c;
 			LatentVariableFitness<?> fit = getFitnessFunction(c);
 
-//			System.out.println("                     Challenger: " + c + " Fitness: " + node.getFitness());
-
 			if (node.getFitness() < best.getFitness())
 				best = node;
 			else if (node.getFitness().equals(best.getFitness()) && node != best) {
-//				System.out.println(" |Breaking ties|");
 				LatentVariableFitness<?> bestFit = getFitnessFunction(best);
 				List<Double> newTieBreak = fit.breakTies();
 				List<Double> bestTieBreak = bestFit.breakTies();
@@ -181,6 +180,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 		population = generatePopulation(getGPConf().getPopulationSize() - seeds.size());
 
 		population.addAll(seeds);
+
 		evaluatePopulation(population);
 
 		fittest = chooseBest(population);
@@ -192,7 +192,6 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 		for (int i = 1; i <= lim; i++) {
 			population = it.iterate(this);
 
-			evaluatePopulation(population);
 			fittest = chooseBest(population);
 
 			LOGGER.debug("GP iteration: " + i + " - best individual: " + fittest + " fitness: " + fittest.getFitness()
@@ -202,10 +201,9 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 				break;
 
 			it = getIterator(population);
-
 		}
 
-		return fittest.simp();
+		return fittest;
 	}
 
 }
