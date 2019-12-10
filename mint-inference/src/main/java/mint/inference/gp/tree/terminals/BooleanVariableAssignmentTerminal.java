@@ -6,7 +6,6 @@ import java.util.Set;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
-import mint.inference.gp.Generator;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
@@ -21,14 +20,6 @@ public class BooleanVariableAssignmentTerminal extends VariableTerminal<BooleanV
 	public BooleanVariableAssignmentTerminal(VariableAssignment<Boolean> var, boolean constant, boolean latent) {
 		super(constant, latent);
 		this.terminal = (BooleanVariableAssignment) var;
-	}
-
-	@Override
-	public void mutate(Generator g, int depth) {
-		if (depth == 0)
-			swapWith(g.generateRandomExpression(1, Datatype.BOOLEAN));
-		else
-			swapWith(g.generateRandomExpression(g.getRandom().nextInt(depth), Datatype.BOOLEAN));
 	}
 
 	@Override

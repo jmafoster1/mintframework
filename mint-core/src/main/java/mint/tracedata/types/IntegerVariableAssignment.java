@@ -178,4 +178,12 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 		return values;
 	}
 
+	@Override
+	public void fuzz() {
+		if (VariableAssignment.rand.nextDouble() > 0.5)
+			this.value++;
+		else
+			this.value--;
+	}
+
 }

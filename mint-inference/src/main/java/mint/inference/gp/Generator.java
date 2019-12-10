@@ -1,6 +1,7 @@
 package mint.inference.gp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class Generator {
 	protected List<VariableTerminal<?>> terminals;
 	protected AssignmentOperator aop;
 	protected int listLength = 0;
+	private final int TIMEOUT = 5;
 
 	public void setListLength(int length) {
 		listLength = length;
@@ -67,13 +69,9 @@ public class Generator {
 		this.terminals.add(terminals);
 	}
 
-	/*
-	 * public Chromosome generateRandomExpression(int maxD, List<NonTerminal<?>>
-	 * nonTerms, List<VariableTerminal<?>> terms){ if(nonTerms.isEmpty()){ return
-	 * selectRandomTerminal(terms); } if((maxD < 2 || rand.nextDouble() <
-	 * threshold())&&!terms.isEmpty()){ return selectRandomTerminal(terms); } else
-	 * return selectRandomNonTerminal(nonTerms, maxD); }
-	 */
+	public List<VariableTerminal<?>> getTerminals() {
+		return this.terminals;
+	}
 
 	public Node<?> generateRandomExpressionAux(int maxD, Datatype type) {
 		List<NonTerminal<?>> nonTerms = nonTerminals(type);
@@ -106,7 +104,9 @@ public class Generator {
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
 			if (!nonTerminals(type).isEmpty()) {
-				while (populationContains(population, instance)) {
+				int iteration = 0;
+				while (populationContains(population, instance) && iteration < TIMEOUT) {
+					iteration++;
 					instance = generateRandomExpression(maxD + 1, type);
 				}
 			}
@@ -151,10 +151,21 @@ public class Generator {
 	}
 
 	public Node<?> generateRandomNonTerminal(Datatype[] typeSignature) {
-		List<NonTerminal<?>> suitable;
+		List<NonTerminal<?>> suitable = functions.stream()
+				.filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature)).collect(Collectors.toList());
+		if (suitable.isEmpty())
+			throw new IllegalStateException(
+					"No suitable nonterminials for type signature " + Arrays.toString(typeSignature));
 
-		suitable = functions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
+		return suitable.get(rand.nextInt(suitable.size()));
+	}
+
+	public Node<?> generateRandomNonTerminal(Datatype typeSignature) {
+		List<NonTerminal<?>> suitable = functions.stream().filter(f -> f.getReturnType() == typeSignature)
 				.collect(Collectors.toList());
+		if (suitable.isEmpty())
+			throw new IllegalStateException("No suitable nonterminials for type signature " + typeSignature);
+
 		return suitable.get(rand.nextInt(suitable.size()));
 	}
 }

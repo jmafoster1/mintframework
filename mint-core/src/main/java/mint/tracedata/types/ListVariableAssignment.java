@@ -108,4 +108,9 @@ public class ListVariableAssignment extends VariableAssignment<List<?>> {
 			values.add(v);
 	}
 
+	@Override
+	// Not implemented
+	public void fuzz() {
+	}
+
 }

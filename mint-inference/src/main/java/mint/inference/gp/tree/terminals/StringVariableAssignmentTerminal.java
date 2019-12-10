@@ -7,7 +7,6 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
 
-import mint.inference.gp.Generator;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
@@ -29,14 +28,6 @@ public class StringVariableAssignmentTerminal extends VariableTerminal<StringVar
 		super(true, false);
 		StringVariableAssignment var = new StringVariableAssignment(value, value, true);
 		this.terminal = var;
-	}
-
-	@Override
-	public void mutate(Generator g, int depth) {
-		int random = 0;
-		if (depth > 0)
-			random = g.getRandom().nextInt(depth);
-		swapWith(g.generateRandomExpression(random, Datatype.STRING));
 	}
 
 	@Override

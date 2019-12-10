@@ -140,4 +140,9 @@ public class DoubleVariableAssignment extends NumberVariableAssignment<Double> {
 			values.add(v);
 	}
 
+	@Override
+	public void fuzz() {
+		this.value += ((2 * VariableAssignment.rand.nextDouble()) - 1);
+	}
+
 }

@@ -69,13 +69,6 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		return nodes;
 	}
 
-	private Node<?> getRandomNode(Generator g) {
-		List<Node<?>> allNodesOfTree = this.getAllNodesAsList();
-		int allNodesOfTreeCount = allNodesOfTree.size();
-		int indx = g.getRandom().nextInt(allNodesOfTreeCount);
-		return allNodesOfTree.get(indx);
-	}
-
 	@Override
 	public void mutate(Generator g, int depth) {
 		int type = g.getRandom().nextInt(6);
@@ -89,7 +82,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 			break;
 		case 2:
 			// HVL ADD
-			mutateByGrowth(g);
+			this.mutateByGrowth(g);
 			break;
 		case 3:
 			// Reverse children if they have the same return type, e.g. (x - y) -> (y - x)
@@ -119,22 +112,6 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		if (!this.children.isEmpty()) {
 			Node<?> child = this.getChild(g.getRandom().nextInt(this.children.size()));
 			child.swapWith(g.generateRandomTerminal(child.getReturnType()));
-		}
-	}
-
-	private void mutateByGrowth(Generator g) {
-		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
-			Node<?> mutationPoint = this.getRandomNode(g);
-			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint.typeSignature());
-			boolean thisAdded = false;
-			for (Datatype type : newRoot.typeSignature()) {
-				if (type == mutationPoint.getReturnType() && !thisAdded) {
-					newRoot.addChild(mutationPoint.copy());
-					thisAdded = true;
-				} else
-					newRoot.addChild(g.generateRandomTerminal(type));
-			}
-			mutationPoint.swapWith(newRoot);
 		}
 	}
 
@@ -236,6 +213,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	protected abstract NonTerminal<T> newInstance();
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public boolean sameSyntax(Chromosome c) {
 		if (this.getClass().equals(c.getClass())) {
 			if (this.getChildren().size() == ((NonTerminal<T>) c).getChildren().size()) {

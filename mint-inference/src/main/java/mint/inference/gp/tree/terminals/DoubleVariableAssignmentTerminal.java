@@ -6,7 +6,6 @@ import java.util.Set;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
-import mint.inference.gp.Generator;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
@@ -43,20 +42,6 @@ public class DoubleVariableAssignmentTerminal extends VariableTerminal<DoubleVar
 		DoubleVariableAssignment dvar = new DoubleVariableAssignment("res", (Double) vals.iterator().next());
 		DoubleVariableAssignmentTerminal term = new DoubleVariableAssignmentTerminal(dvar, true, false);
 		return term;
-	}
-
-	@Override
-	public void mutate(Generator g, int depth) {
-
-		if (this.isConstant()) {
-			terminal.setToRandom();
-		} else if (!this.isConstant()) {
-			if (depth == 0)
-				swapWith(g.generateRandomExpression(1, Datatype.DOUBLE));
-			else
-				swapWith(g.generateRandomExpression(g.getRandom().nextInt(depth), Datatype.DOUBLE));
-
-		}
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.Set;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
-import mint.inference.gp.Generator;
 import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
@@ -54,18 +53,6 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 		IntegerVariableAssignment ivar = new IntegerVariableAssignment("res", (Integer) vals.iterator().next());
 		IntegerVariableAssignmentTerminal term = new IntegerVariableAssignmentTerminal(ivar, true, false);
 		return term;
-	}
-
-	@Override
-	public void mutate(Generator g, int depth) {
-		if (!this.isConstant()) {
-			int limit = depth;
-			if (limit == 0)
-				limit++;
-			swapWith(g.generateRandomExpression(g.getRandom().nextInt(limit), Datatype.INTEGER));
-		} else if (this.isConstant()) {
-			terminal.setToRandom();
-		}
 	}
 
 	@Override

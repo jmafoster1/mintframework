@@ -3,6 +3,7 @@ package mint.inference.gp.tree;
 import java.util.ArrayList;
 import java.util.List;
 
+import mint.inference.gp.Generator;
 import mint.tracedata.types.VariableAssignment;
 
 /**
@@ -60,5 +61,15 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 		List<Node<?>> nodes = new ArrayList<Node<?>>();
 		nodes.add(this);
 		return nodes;
+	}
+
+	@Override
+	public void mutate(Generator g, int depth) {
+		if (this.isConstant()) {
+			terminal.fuzz();
+		} else if (!this.isConstant()) {
+			this.mutateByGrowth(g);
+
+		}
 	}
 }

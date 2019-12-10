@@ -302,4 +302,6 @@ public abstract class VariableAssignment<T> {
 	public void setPriors(Collection<T> from) {
 		this.from = from;
 	}
+
+	public abstract void fuzz();
 }

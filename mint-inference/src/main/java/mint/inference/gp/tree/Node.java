@@ -194,4 +194,27 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 
 	public abstract Datatype[] typeSignature();
 
+	protected Node<?> getRandomNode(Generator g) {
+		List<Node<?>> allNodesOfTree = this.getAllNodesAsList();
+		int allNodesOfTreeCount = allNodesOfTree.size();
+		int indx = g.getRandom().nextInt(allNodesOfTreeCount);
+		return allNodesOfTree.get(indx);
+	}
+
+	protected void mutateByGrowth(Generator g) {
+		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
+			Node<?> mutationPoint = this.getRandomNode(g);
+			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint.getReturnType());
+			boolean thisAdded = false;
+			for (Datatype type : newRoot.typeSignature()) {
+				if (type == mutationPoint.getReturnType() && !thisAdded) {
+					newRoot.addChild(mutationPoint.copy());
+					thisAdded = true;
+				} else
+					newRoot.addChild(g.generateRandomTerminal(type));
+			}
+			mutationPoint.swapWith(newRoot);
+		}
+	}
+
 }

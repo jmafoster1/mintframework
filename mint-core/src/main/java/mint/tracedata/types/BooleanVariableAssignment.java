@@ -72,4 +72,9 @@ public class BooleanVariableAssignment extends VariableAssignment<Boolean> {
 			values.add(v);
 	}
 
+	@Override
+	public void fuzz() {
+		this.value = !this.value;
+	}
+
 }
