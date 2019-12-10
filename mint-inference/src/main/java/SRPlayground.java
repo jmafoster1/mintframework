@@ -11,12 +11,11 @@ import org.apache.log4j.Logger;
 import mint.inference.evo.GPConfiguration;
 import mint.inference.gp.Generator;
 import mint.inference.gp.LatentVariableGP;
+import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
-import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.integers.AddIntegersOperator;
 import mint.inference.gp.tree.nonterminals.integers.SubtractIntegersOperator;
 import mint.inference.gp.tree.terminals.IntegerVariableAssignmentTerminal;
-import mint.inference.gp.tree.terminals.VariableTerminal;
 import mint.tracedata.types.IntegerVariableAssignment;
 import mint.tracedata.types.VariableAssignment;
 
@@ -56,25 +55,19 @@ public class SRPlayground {
 
 		Generator gpGenerator = new Generator(new Random(seed));
 
-		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
-		intNonTerms.add(new AddIntegersOperator());
-		intNonTerms.add(new SubtractIntegersOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.add(new AddIntegersOperator());
+		gpGenerator.add(new SubtractIntegersOperator());
 
-		List<VariableTerminal<?>> intTerms = new ArrayList<VariableTerminal<?>>();
-
-		intTerms.add(new IntegerVariableAssignmentTerminal("i0", false));
-		intTerms.add(new IntegerVariableAssignmentTerminal("r1", true));
+		gpGenerator.add(new IntegerVariableAssignmentTerminal("i0", false));
+		gpGenerator.add(new IntegerVariableAssignmentTerminal("r1", true));
 
 		for (int i : new int[] { 0, 1, 50, 10, 20, 100, 30, 70 })
-			intTerms.add(new IntegerVariableAssignmentTerminal(i));
-
-		gpGenerator.setIntegerTerminals(intTerms);
+			gpGenerator.add(new IntegerVariableAssignmentTerminal(i));
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = generateTrainingSet();
 
 		System.out.println("Training set: " + trainingSet);
-		System.out.println("IntTerms: " + intTerms);
+		System.out.println("IntTerms: " + gpGenerator.terminals(Datatype.INTEGER));
 		System.out.println("Int values: " + IntegerVariableAssignment.values());
 
 		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet,

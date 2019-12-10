@@ -40,7 +40,7 @@ public class UpdateSRPlayground {
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		intNonTerms.add(new AddIntegersOperator());
 		intNonTerms.add(new SubtractIntegersOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		List<VariableTerminal<?>> intTerms = new ArrayList<VariableTerminal<?>>();
 		intTerms.add(new IntegerVariableAssignmentTerminal("i0", false));
@@ -56,7 +56,7 @@ public class UpdateSRPlayground {
 		intTerms.add(new IntegerVariableAssignmentTerminal(80));
 		intTerms.add(new IntegerVariableAssignmentTerminal(50));
 		intTerms.add(new IntegerVariableAssignmentTerminal(100));
-		gpGenerator.setIntegerTerminals(intTerms);
+		gpGenerator.addTerminals(intTerms);
 
 		scenario(50, 0, 50);
 		scenario(20, 0, 20);

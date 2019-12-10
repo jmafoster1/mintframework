@@ -23,14 +23,8 @@ import mint.tracedata.types.VariableAssignment;
 public class Generator {
 
 	protected Random rand;
-	protected List<NonTerminal<?>> dFunctions;
-	protected List<VariableTerminal<?>> dTerminals;
-	protected List<NonTerminal<?>> iFunctions;
-	protected List<VariableTerminal<?>> iTerminals;
-	protected List<NonTerminal<?>> sFunctions;
-	protected List<VariableTerminal<?>> sTerminals;
-	protected List<NonTerminal<?>> bFunctions;
-	protected List<VariableTerminal<?>> bTerminals;
+	protected List<NonTerminal<?>> functions;
+	protected List<VariableTerminal<?>> terminals;
 	protected AssignmentOperator aop;
 	protected int listLength = 0;
 
@@ -40,14 +34,8 @@ public class Generator {
 
 	public Generator(Random r) {
 		rand = r;
-		dFunctions = new ArrayList<NonTerminal<?>>();
-		iFunctions = new ArrayList<NonTerminal<?>>();
-		dTerminals = new ArrayList<VariableTerminal<?>>();
-		iTerminals = new ArrayList<VariableTerminal<?>>();
-		sTerminals = new ArrayList<VariableTerminal<?>>();
-		sFunctions = new ArrayList<NonTerminal<?>>();
-		bTerminals = new ArrayList<VariableTerminal<?>>();
-		bFunctions = new ArrayList<NonTerminal<?>>();
+		functions = new ArrayList<NonTerminal<?>>();
+		terminals = new ArrayList<VariableTerminal<?>>();
 		aop = new AssignmentOperator();
 	}
 
@@ -55,36 +43,28 @@ public class Generator {
 		return rand;
 	}
 
-	public void setDoubleFunctions(List<NonTerminal<?>> doubleFunctions) {
-		dFunctions = doubleFunctions;
+	public void setFunctions(List<NonTerminal<?>> functions) {
+		this.functions = functions;
 	}
 
-	public void setIntegerFunctions(List<NonTerminal<?>> intFunctions) {
-		iFunctions = intFunctions;
+	public void addFunctions(List<NonTerminal<?>> functions) {
+		this.functions.addAll(functions);
 	}
 
-	public void setDoubleTerminals(List<VariableTerminal<?>> doubleTerms) {
-		dTerminals = doubleTerms;
+	public void add(NonTerminal<?> functions) {
+		this.functions.add(functions);
 	}
 
-	public void setIntegerTerminals(List<VariableTerminal<?>> intFunctions) {
-		iTerminals = intFunctions;
+	public void setTerminals(List<VariableTerminal<?>> terminals) {
+		this.terminals = terminals;
 	}
 
-	public void setStringTerminals(List<VariableTerminal<?>> sTerms) {
-		sTerminals = sTerms;
+	public void addTerminals(List<VariableTerminal<?>> terminals) {
+		this.terminals.addAll(terminals);
 	}
 
-	public void setStringFunctions(List<NonTerminal<?>> sFunctions) {
-		this.sFunctions = sFunctions;
-	}
-
-	public void setBooleanTerminals(List<VariableTerminal<?>> bTerms) {
-		bTerminals = bTerms;
-	}
-
-	public void setBooleanFunctions(List<NonTerminal<?>> bFunctions) {
-		this.bFunctions = bFunctions;
+	public void add(VariableTerminal<?> terminals) {
+		this.terminals.add(terminals);
 	}
 
 	/*
@@ -96,8 +76,8 @@ public class Generator {
 	 */
 
 	public Node<?> generateRandomExpressionAux(int maxD, Datatype type) {
-		List<NonTerminal<?>> nonTerms = nonTerms(type);
-		List<VariableTerminal<?>> terms = terms(type);
+		List<NonTerminal<?>> nonTerms = nonTerminals(type);
+		List<VariableTerminal<?>> terms = terminals(type);
 		if (nonTerms.isEmpty() || maxD < 2) {
 			return selectRandomTerminal(terms);
 		} else {
@@ -125,7 +105,7 @@ public class Generator {
 			Chromosome instance = generateRandomExpression(maxD + 1, type);
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
-			if (!nonTerms(type).isEmpty()) {
+			if (!nonTerminals(type).isEmpty()) {
 				while (populationContains(population, instance)) {
 					instance = generateRandomExpression(maxD + 1, type);
 				}
@@ -141,7 +121,7 @@ public class Generator {
 			Chromosome instance = generateRandomExpression(maxD + 1, type);
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
-			if (!nonTerms(type).isEmpty()) {
+			if (!nonTerminals(type).isEmpty()) {
 				while (populationContains(population, instance) || populationContains(existing, instance)) {
 					instance = generateRandomExpression(maxD + 1, type);
 				}
@@ -158,80 +138,23 @@ public class Generator {
 		return selected.copy();
 	}
 
-	public List<NonTerminal<?>> nonTerms(Datatype s) {
-		switch (s) {
-		case INTEGER:
-			return this.iFunctions;
-		case DOUBLE:
-			return this.dFunctions;
-		case BOOLEAN:
-			return this.bFunctions;
-		case STRING:
-			return this.sFunctions;
-		default:
-			break;
-		}
-		throw new IllegalArgumentException("Invaild type " + s);
+	public List<NonTerminal<?>> nonTerminals(Datatype s) {
+		return this.functions.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
 	}
 
-	public List<VariableTerminal<?>> terms(Datatype s) {
-		switch (s) {
-		case INTEGER:
-			return this.iTerminals;
-		case DOUBLE:
-			return this.dTerminals;
-		case BOOLEAN:
-			return this.bTerminals;
-		case STRING:
-			return this.sTerminals;
-		default:
-			break;
-		}
-		throw new IllegalArgumentException("Invaild type " + s);
+	public List<VariableTerminal<?>> terminals(Datatype s) {
+		return this.terminals.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
 	}
 
 	public Node<?> generateRandomTerminal(Datatype type) {
-		switch (type) {
-		case BOOLEAN:
-			return selectRandomTerminal(bTerminals);
-		case STRING:
-			return selectRandomTerminal(sTerminals);
-		case INTEGER:
-			return selectRandomTerminal(iTerminals);
-		case DOUBLE:
-			return selectRandomTerminal(dTerminals);
-		default:
-			break;
-		}
-
-		throw new IllegalArgumentException("Datatype must be one of BOOLEAN, STRING, INTEGER, or DOUBLE");
+		return selectRandomTerminal(terminals(type));
 	}
 
 	public Node<?> generateRandomNonTerminal(Datatype[] typeSignature) {
-		Datatype returnType = typeSignature[typeSignature.length - 1];
 		List<NonTerminal<?>> suitable;
 
-		switch (returnType) {
-		case BOOLEAN:
-			suitable = bFunctions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
-					.collect(Collectors.toList());
-			return suitable.get(rand.nextInt(suitable.size()));
-		case STRING:
-			suitable = sFunctions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
-					.collect(Collectors.toList());
-			return suitable.get(rand.nextInt(suitable.size()));
-		case INTEGER:
-			suitable = iFunctions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
-					.collect(Collectors.toList());
-			return suitable.get(rand.nextInt(suitable.size()));
-		case DOUBLE:
-			suitable = dFunctions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
-					.collect(Collectors.toList());
-			return suitable.get(rand.nextInt(suitable.size()));
-		default:
-			break;
-		}
-		throw new IllegalArgumentException("Datatype must be one of BOOLEAN, STRING, INTEGER, or DOUBLE");
+		suitable = functions.stream().filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature))
+				.collect(Collectors.toList());
+		return suitable.get(rand.nextInt(suitable.size()));
 	}
-
 }

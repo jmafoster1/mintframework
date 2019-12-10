@@ -31,7 +31,7 @@ public class StringSRPlayground {
 		stringTerms.add(new StringVariableAssignmentTerminal("coke"));
 		stringTerms.add(new StringVariableAssignmentTerminal("pepsi"));
 		stringTerms.add(new StringVariableAssignmentTerminal("beer"));
-		gpGenerator.setStringTerminals(stringTerms);
+		gpGenerator.addTerminals(stringTerms);
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 		trainingSet.put(new ArrayList<VariableAssignment<?>>(), new StringVariableAssignment("o1", "coke"));

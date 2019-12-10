@@ -61,7 +61,7 @@ public class GPTester {
 		doubleNonTerms.add(new CosDoublesOperator());
 		doubleNonTerms.add(new ExpDoublesOperator());
 		doubleNonTerms.add(new LogDoublesOperator());
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("a"), false, false));
@@ -70,10 +70,10 @@ public class GPTester {
 		// DoubleVariableAssignment("2",2.0), true));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("1", 1D), true, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("0", 0.5D), true, false));
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
 		boolNonTerms.add(new AndBooleanOperator());
@@ -81,7 +81,7 @@ public class GPTester {
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
 		boolNonTerms.add(new EQBooleanOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
 		VariableAssignment<Boolean> truevar = new BooleanVariableAssignment("true", true);
@@ -90,7 +90,7 @@ public class GPTester {
 		BooleanVariableAssignmentTerminal falseterm = new BooleanVariableAssignmentTerminal(falsevar, true, false);
 		boolTerms.add(trueterm);
 		boolTerms.add(falseterm);
-		gpGenerator.setBooleanTerminals(boolTerms);
+		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateTrainingSet(60),
 				new GPConfiguration(60, 0.7, 1, 5, 7), false);
@@ -121,7 +121,7 @@ public class GPTester {
 		// doubleNonTerms.add(createConstrained(constrained,new CosDoublesOperator()));
 		doubleNonTerms.add(createConstrained(constrained, new ExpDoublesOperator()));
 		doubleNonTerms.add(createConstrained(constrained, new LogDoublesOperator()));
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("a"), false, false));
@@ -129,10 +129,10 @@ public class GPTester {
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("2", 2.0), true, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("1", 1D), true, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("0", 0D), true, false));
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
 		boolNonTerms.add(new AndBooleanOperator());
@@ -140,7 +140,7 @@ public class GPTester {
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
 		boolNonTerms.add(new EQBooleanOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
 		VariableAssignment<Boolean> truevar = new BooleanVariableAssignment("true", true);
@@ -149,7 +149,7 @@ public class GPTester {
 		BooleanVariableAssignmentTerminal falseterm = new BooleanVariableAssignmentTerminal(falsevar, true, false);
 		boolTerms.add(trueterm);
 		boolTerms.add(falseterm);
-		gpGenerator.setBooleanTerminals(boolTerms);
+		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateTrainingSet(100),
 				new GPConfiguration(200, 0.9, 0.1, 5, 20), false);
@@ -168,7 +168,7 @@ public class GPTester {
 		doubleNonTerms.add(new MultiplyDoublesOperator());
 		doubleNonTerms.add(new IfThenElseOperator());
 		// doubleNonTerms.add(new WriteAuxOperator());
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("a"), false, false));
@@ -176,11 +176,11 @@ public class GPTester {
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("1", 1.0), true, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("0.5", 0.5), true, false));
 		// doubleTerms.add(new ReadAuxTerminal());
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		// intNonTerms.add(new CastIntegersOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
 		boolNonTerms.add(new AndBooleanOperator());
@@ -188,7 +188,7 @@ public class GPTester {
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
 		boolNonTerms.add(new EQBooleanOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
 		VariableAssignment<Boolean> truevar = new BooleanVariableAssignment("true", true);
@@ -197,7 +197,7 @@ public class GPTester {
 		BooleanVariableAssignmentTerminal falseterm = new BooleanVariableAssignmentTerminal(falsevar, true, false);
 		boolTerms.add(trueterm);
 		boolTerms.add(falseterm);
-		gpGenerator.setBooleanTerminals(boolTerms);
+		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateBooleanTrainingSet(50),
 				new GPConfiguration(100, 0.95, 0.05, 7, 10), false);

@@ -176,11 +176,11 @@ public class GPFunctionMachineDecorator extends MachineDecorator {
 		doubleNonTerms.add(new CosDoublesOperator());
 		doubleNonTerms.add(new ExpDoublesOperator());
 		doubleNonTerms.add(new LogDoublesOperator());
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = generateTerms(payload.iterator().next());
 		// doubleTerms.add(new ReadAuxTerminal());
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
 		boolNonTerms.add(new AndBooleanOperator());
@@ -189,16 +189,16 @@ public class GPFunctionMachineDecorator extends MachineDecorator {
 		boolNonTerms.add(new GTBooleanDoublesOperator());
 		boolNonTerms.add(new EQBooleanOperator());
 		boolNonTerms.add(new EQStringOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		intNonTerms.add(new CastIntegersOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
-		gpGenerator.setIntegerTerminals(generateIntTerms(payload.iterator().next()));
+		gpGenerator.addFunctions(intNonTerms);
+		gpGenerator.addTerminals(generateIntTerms(payload.iterator().next()));
 
-		gpGenerator.setBooleanTerminals(generateBooleanTerms(payload.iterator().next()));
+		gpGenerator.addTerminals(generateBooleanTerms(payload.iterator().next()));
 
-		gpGenerator.setStringTerminals(generateStringTerms(payload));
+		gpGenerator.addTerminals(generateStringTerms(payload));
 		return gpGenerator;
 	}
 

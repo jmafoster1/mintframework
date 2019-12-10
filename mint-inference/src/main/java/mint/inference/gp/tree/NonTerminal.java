@@ -108,7 +108,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	}
 
 	private void mutateByRandomChangeOfFunction(Generator g) {
-		if (!g.nonTerms(this.getReturnType()).isEmpty()) {
+		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
 			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(this.typeSignature());
 			newFun.setChildren(this.children);
 			this.swapWith(newFun);
@@ -123,7 +123,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	}
 
 	private void mutateByGrowth(Generator g) {
-		if (!g.nonTerms(this.getReturnType()).isEmpty()) {
+		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
 			Node<?> mutationPoint = this.getRandomNode(g);
 			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint.typeSignature());
 			boolean thisAdded = false;

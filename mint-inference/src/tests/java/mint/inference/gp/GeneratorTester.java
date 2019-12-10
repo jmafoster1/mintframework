@@ -37,12 +37,12 @@ public class GeneratorTester {
 		doubleNonTerms.add(new MultiplyDoublesOperator());
 		doubleNonTerms.add(new CosDoublesOperator());
 
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("x", 2D), false, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("y", 4D), false, false));
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(0,
 				Datatype.DOUBLE);
@@ -62,12 +62,12 @@ public class GeneratorTester {
 		doubleNonTerms.add(new MultiplyDoublesOperator());
 		doubleNonTerms.add(new CosDoublesOperator());
 
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("x", 2D), false, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("y", 4D), false, false));
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(11,
 				Datatype.DOUBLE);
@@ -87,17 +87,17 @@ public class GeneratorTester {
 		doubleNonTerms.add(new MultiplyDoublesOperator());
 		doubleNonTerms.add(new CosDoublesOperator());
 		doubleNonTerms.add(new CastDoublesOperator());
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = new ArrayList<VariableTerminal<?>>();
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("a", 2D), false, false));
 		doubleTerms.add(new DoubleVariableAssignmentTerminal(new DoubleVariableAssignment("b", 4D), false, false));
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<NonTerminal<?>> integerNonTerms = new ArrayList<NonTerminal<?>>();
 
 		integerNonTerms.add(new CastIntegersOperator());
-		gpGenerator.setIntegerFunctions(integerNonTerms);
+		gpGenerator.addFunctions(integerNonTerms);
 
 		Node<DoubleVariableAssignment> exp = (Node<DoubleVariableAssignment>) gpGenerator.generateRandomExpression(11,
 				Datatype.DOUBLE);

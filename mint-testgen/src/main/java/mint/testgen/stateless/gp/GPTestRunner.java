@@ -155,14 +155,14 @@ public class GPTestRunner extends TestRunner {
 		doubleNonTerms.add(new CosDoublesOperator());
 		doubleNonTerms.add(new ExpDoublesOperator());
 		// doubleNonTerms.add(new LogDoublesOperator());
-		gpGenerator.setDoubleFunctions(doubleNonTerms);
+		gpGenerator.addFunctions(doubleNonTerms);
 
 		List<VariableTerminal<?>> doubleTerms = generateTerms(testInputs);
 		// doubleTerms.add(new ReadAuxTerminal());
-		gpGenerator.setDoubleTerminals(doubleTerms);
+		gpGenerator.addTerminals(doubleTerms);
 
 		List<VariableTerminal<?>> intTerms = generateIntTerms(testInputs);
-		gpGenerator.setIntegerTerminals(intTerms);
+		gpGenerator.addTerminals(intTerms);
 
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
 		boolNonTerms.add(new AndBooleanOperator());
@@ -171,12 +171,12 @@ public class GPTestRunner extends TestRunner {
 		boolNonTerms.add(new GTBooleanDoublesOperator());
 		boolNonTerms.add(new EQBooleanOperator());
 		// boolNonTerms.add(new EQStringOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		// intNonTerms.add(new CastIntegersOperator());
 		intNonTerms.add(new IfThenElseIntegerOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
 		VariableAssignment<Boolean> truevar = new BooleanVariableAssignment("truez", true);
@@ -185,7 +185,7 @@ public class GPTestRunner extends TestRunner {
 		BooleanVariableAssignmentTerminal falseterm = new BooleanVariableAssignmentTerminal(falsevar, true, false);
 		boolTerms.add(trueterm);
 		boolTerms.add(falseterm);
-		gpGenerator.setBooleanTerminals(boolTerms);
+		gpGenerator.addTerminals(boolTerms);
 
 		gpGenerator.setListLength(listLength);
 

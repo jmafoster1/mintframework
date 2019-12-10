@@ -44,7 +44,7 @@ public class GuardSRPlayground {
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
 		boolTerms.add(new BooleanVariableAssignmentTerminal(new BooleanVariableAssignment("tr", true), true, false));
 		boolTerms.add(new BooleanVariableAssignmentTerminal(new BooleanVariableAssignment("fa", false), true, false));
-		gpGenerator.setBooleanTerminals(boolTerms);
+		gpGenerator.addTerminals(boolTerms);
 
 		// Boolean nonterminals
 		List<NonTerminal<?>> boolNonTerms = new ArrayList<NonTerminal<?>>();
@@ -53,7 +53,7 @@ public class GuardSRPlayground {
 		boolNonTerms.add(new NotBooleanOperator());
 		boolNonTerms.add(new AndBooleanOperator());
 		boolNonTerms.add(new OrBooleanOperator());
-		gpGenerator.setBooleanFunctions(boolNonTerms);
+		gpGenerator.addFunctions(boolNonTerms);
 
 		// Integer terminals
 		List<VariableTerminal<?>> integerTerms = new ArrayList<VariableTerminal<?>>();
@@ -61,13 +61,13 @@ public class GuardSRPlayground {
 		integerTerms.add(new IntegerVariableAssignmentTerminal(50));
 		integerTerms.add(new IntegerVariableAssignmentTerminal(100));
 		integerTerms.add(new IntegerVariableAssignmentTerminal(0));
-		gpGenerator.setIntegerTerminals(integerTerms);
+		gpGenerator.addTerminals(integerTerms);
 
 		// Integer Nonterminals
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		intNonTerms.add(new AddIntegersOperator());
 		intNonTerms.add(new SubtractIntegersOperator());
-		gpGenerator.setIntegerFunctions(intNonTerms);
+		gpGenerator.addFunctions(intNonTerms);
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 
