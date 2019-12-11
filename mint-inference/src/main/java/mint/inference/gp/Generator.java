@@ -73,6 +73,10 @@ public class Generator {
 		return this.terminals;
 	}
 
+	public List<NonTerminal<?>> getNonTerminals() {
+		return this.functions;
+	}
+
 	public Node<?> generateRandomExpressionAux(int maxD, Datatype type) {
 		List<NonTerminal<?>> nonTerms = nonTerminals(type);
 		List<VariableTerminal<?>> terms = terminals(type);
