@@ -110,6 +110,9 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 
 		double fitness = mistakes + rmsd(distances);
 
+		if (individual instanceof VariableTerminal && fitness > 0)
+			return Double.POSITIVE_INFINITY;
+
 		if (individual.numVarsInTree() == 0) {
 			return fitness;
 		}
