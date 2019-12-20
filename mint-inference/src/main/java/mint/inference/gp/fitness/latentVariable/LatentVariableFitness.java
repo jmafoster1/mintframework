@@ -110,12 +110,8 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 
 		double fitness = mistakes + rmsd(distances);
 
-		if (individual instanceof VariableTerminal && fitness > 0)
-			return Double.POSITIVE_INFINITY;
-
-		if (individual.numVarsInTree() == 0) {
+		if (individual.numVarsInTree() == 0)
 			return fitness;
-		}
 
 		// If we've used all of the available inputs then don't penalise use of latent
 		// variables
