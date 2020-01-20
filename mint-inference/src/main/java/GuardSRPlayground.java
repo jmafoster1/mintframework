@@ -24,8 +24,6 @@ import mint.inference.gp.tree.terminals.BooleanVariableAssignmentTerminal;
 import mint.inference.gp.tree.terminals.IntegerVariableAssignmentTerminal;
 import mint.inference.gp.tree.terminals.VariableTerminal;
 import mint.tracedata.types.BooleanVariableAssignment;
-import mint.tracedata.types.IntegerVariableAssignment;
-import mint.tracedata.types.StringVariableAssignment;
 import mint.tracedata.types.VariableAssignment;
 
 public class GuardSRPlayground {
@@ -59,7 +57,7 @@ public class GuardSRPlayground {
 
 		// Integer terminals
 		List<VariableTerminal<?>> integerTerms = new ArrayList<VariableTerminal<?>>();
-		integerTerms.add(new IntegerVariableAssignmentTerminal("r1", true));
+//		integerTerms.add(new IntegerVariableAssignmentTerminal("r1", true));
 		integerTerms.add(new IntegerVariableAssignmentTerminal(50));
 		integerTerms.add(new IntegerVariableAssignmentTerminal(100));
 		integerTerms.add(new IntegerVariableAssignmentTerminal(0));
@@ -76,32 +74,32 @@ public class GuardSRPlayground {
 		VariableAssignment<?> o1True = new BooleanVariableAssignment("o1", true);
 		VariableAssignment<?> o1False = new BooleanVariableAssignment("o1", false);
 
-//		{[r2=coke, r1=50]=[g2=false], [r2=pepsi, r1=0]=[g2=false], [r2=tizer, r1=0]=[g2=false], [r2=tizer, r1=0]=[g1=true], [r2=coke, r1=0]=[g2=false]}
-
-//		[r2=coke, r1=50]=[g2=false]
+////		{[r2=coke, r1=50]=[g2=false], [r2=pepsi, r1=0]=[g2=false], [r2=tizer, r1=0]=[g2=false], [r2=tizer, r1=0]=[g1=true], [r2=coke, r1=0]=[g2=false]}
+//
+////		[r2=coke, r1=50]=[g2=false]
 		List<VariableAssignment<?>> s1 = new ArrayList<VariableAssignment<?>>();
-		s1.add(new IntegerVariableAssignment("r1", 0));
-		s1.add(new StringVariableAssignment("r2", "coke"));
+//		s1.add(new IntegerVariableAssignment("r1", 0));
+//		s1.add(new StringVariableAssignment("r2", "coke"));
 		trainingSet.put(s1, o1False);
-
-//		[r2=pepsi, r1=0]=[g2=false]
-		List<VariableAssignment<?>> s1a = new ArrayList<VariableAssignment<?>>();
-		s1a.add(new IntegerVariableAssignment("r1", 0));
-		s1a.add(new StringVariableAssignment("r2", "pepsi"));
-		trainingSet.put(s1a, o1False);
-
-//		[r2=tizer, r1=0]=[g2=false]
-		List<VariableAssignment<?>> s1b = new ArrayList<VariableAssignment<?>>();
-		s1b.add(new IntegerVariableAssignment("r1", 0));
-		s1b.add(new StringVariableAssignment("r2", "tizer"));
-		trainingSet.put(s1b, o1False);
-
-		List<VariableAssignment<?>> s2 = new ArrayList<VariableAssignment<?>>();
-		s2.add(new IntegerVariableAssignment("r1", 50));
-		trainingSet.put(s2, o1False);
-
+//
+////		[r2=pepsi, r1=0]=[g2=false]
+//		List<VariableAssignment<?>> s1a = new ArrayList<VariableAssignment<?>>();
+//		s1a.add(new IntegerVariableAssignment("r1", 0));
+//		s1a.add(new StringVariableAssignment("r2", "pepsi"));
+//		trainingSet.put(s1a, o1False);
+//
+////		[r2=tizer, r1=0]=[g2=false]
+//		List<VariableAssignment<?>> s1b = new ArrayList<VariableAssignment<?>>();
+//		s1b.add(new IntegerVariableAssignment("r1", 0));
+//		s1b.add(new StringVariableAssignment("r2", "tizer"));
+//		trainingSet.put(s1b, o1False);
+//
+//		List<VariableAssignment<?>> s2 = new ArrayList<VariableAssignment<?>>();
+//		s2.add(new IntegerVariableAssignment("r1", 50));
+//		trainingSet.put(s2, o1False);
+//
 		List<VariableAssignment<?>> s3 = new ArrayList<VariableAssignment<?>>();
-		s3.add(new IntegerVariableAssignment("r1", 100));
+//		s3.add(new IntegerVariableAssignment("r1", 100));
 		trainingSet.put(s3, o1True);
 
 //		List<VariableAssignment<?>> s4 = new ArrayList<VariableAssignment<?>>();
@@ -113,6 +111,8 @@ public class GuardSRPlayground {
 //		trainingSet.put(s5, o1True);
 
 		System.out.println(trainingSet);
+
+		System.out.println(trainingSet.keys().stream().anyMatch(x -> trainingSet.get(x).size() > 1));
 
 		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(50, 0.9f, 1f, 7, 7));
 
