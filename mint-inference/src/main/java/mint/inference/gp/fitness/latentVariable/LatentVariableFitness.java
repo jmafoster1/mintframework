@@ -37,6 +37,16 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		return individual;
 	}
 
+	private double getOffBy(VariableTerminal<?> var, T value, List<VariableAssignment<?>> ctx,
+			Entry<List<VariableAssignment<?>>, VariableAssignment<?>> current)
+			throws InterruptedException, InvalidDistanceException {
+		var.setValue(value);
+		List<VariableAssignment<?>> ctx1 = new ArrayList<VariableAssignment<?>>(ctx);
+		ctx1.add(var.getTerminal().copy());
+		T actual = new CallableNodeExecutor<>(individual.copy(), ctx1).call();
+		return distance(actual, current.getValue().getValue());
+	}
+
 	private double calculateDistance(Entry<List<VariableAssignment<?>>, VariableAssignment<?>> current,
 			Set<VariableTerminal<?>> latent) throws InterruptedException {
 		individual.reset();
@@ -53,19 +63,26 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 			}
 
 			for (VariableTerminal<?> var : latent) {
-				T[] values = (T[]) var.getTerminal().getValues().toArray();
-				for (T value : values) {
-					var.setValue(value);
-					ctx.add(var.getTerminal().copy());
-					executor = new CallableNodeExecutor<>(individual, ctx);
-					actual = executor.call();
-					double offBy = distance(actual, current.getValue().getValue());
-//					System.out.println("value: " + value + " expected: " + current.getValue().getValue() + " actual: "
-//							+ actual + " distance: " + offBy);
-					if (offBy < minDistance) {
-						minDistance = offBy;
+				minDistance = var.getTerminal().getValues().parallelStream().map(value -> {
+					try {
+						return getOffBy(var, (T) value, ctx, current);
+					} catch (InterruptedException | InvalidDistanceException e) {
+						return Double.POSITIVE_INFINITY;
 					}
-				}
+				}).min(Double::compare).get();
+//				T[] values = (T[]) var.getTerminal().getValues().toArray();
+//				for (T value : values) {
+//					var.setValue(value);
+//					ctx.add(var.getTerminal().copy());
+//					executor = new CallableNodeExecutor<>(individual, ctx);
+//					actual = executor.call();
+//					double offBy = distance(actual, current.getValue().getValue());
+////					System.out.println("value: " + value + " expected: " + current.getValue().getValue() + " actual: "
+////							+ actual + " distance: " + offBy);
+//					if (offBy < minDistance) {
+//						minDistance = offBy;
+//					}
+//				}
 			}
 		} catch (ClassCastException e) {
 			e.printStackTrace();
