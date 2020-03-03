@@ -37,9 +37,7 @@ public class NodeSimplifier {
 			f.addChild(fromZ3(e[1]).copy());
 			return f;
 		} else {
-			NonTerminal<?> fPrime = (NonTerminal<?>) f.copy();
-			fPrime.clearChildren();
-			Node<?> right = makeBinary(Arrays.copyOfRange(e, 1, e.length), fPrime);
+			Node<?> right = makeBinary(Arrays.copyOfRange(e, 1, e.length), f.newInstance());
 			f.addChild(fromZ3(e[0]));
 			f.addChild(right.copy());
 			return f;
