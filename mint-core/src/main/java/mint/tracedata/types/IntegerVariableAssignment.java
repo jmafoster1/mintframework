@@ -180,10 +180,17 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 
 	@Override
 	public void fuzz() {
-		if (VariableAssignment.rand.nextDouble() > 0.5)
+		switch (VariableAssignment.rand.nextInt(3)) {
+		case 0:
 			this.value++;
-		else
+			break;
+		case 1:
 			this.value--;
+			break;
+		case 2:
+			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
+			break;
+		}
 	}
 
 }
