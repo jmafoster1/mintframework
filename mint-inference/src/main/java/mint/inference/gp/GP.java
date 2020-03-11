@@ -39,17 +39,21 @@ public abstract class GP<T> extends AbstractEvo {
 
 	@Override
 	public List<Chromosome> generatePopulation(int i) {
+		// System.out.println("gp.generatePopulation");
 		List<Chromosome> population = null;
 		population = gen.generatePopulation(i, getGPConf().getDepth(), getType());
 		population.addAll(seeds);
+		// System.out.println("gp.generatePopulation finished");
 		return population;
 	}
 
 	@Override
 	public List<Chromosome> generatePopulation(int i, List<Chromosome> existing) {
+		// System.out.println("gp.generatePopulation2");
 		List<Chromosome> population = null;
 		population = gen.generatePopulation(i, getGPConf().getDepth(), getType(), existing);
 		population.addAll(seeds);
+		// System.out.println("gp.generatePopulation2 finished");
 		return population;
 	}
 

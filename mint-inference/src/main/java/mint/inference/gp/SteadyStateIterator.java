@@ -197,6 +197,7 @@ public class SteadyStateIterator extends AbstractIterator {
 
 	@Override
 	public List<Chromosome> iterate(AbstractEvo gp) {
+		// System.out.println("Building new population");
 		List<Chromosome> newPopulation = new ArrayList<Chromosome>(population);
 		sel = gp.getSelection(population);
 
@@ -210,11 +211,17 @@ public class SteadyStateIterator extends AbstractIterator {
 			newPopulation.add(mutate(population.get(rand.nextInt(population.size()))));
 		}
 
+		// System.out.println("Simplifying new population");
 		newPopulation = newPopulation.stream().map(c -> c.simp()).collect(Collectors.toList());
+		// System.out.println("Simplified new population");
 
+		// System.out.println("Removing duplicates");
 		newPopulation = gp.removeDuplicates(newPopulation);
+		// System.out.println("Removed duplicates");
 
+		// System.out.println("Evaluating new population");
 		gp.evaluatePopulation(newPopulation);
+		// System.out.println("Evaluated new population");
 
 		// Sort by fitness and drop the worst if there's a surplus after removing
 		// duplicates
@@ -226,11 +233,14 @@ public class SteadyStateIterator extends AbstractIterator {
 		int remainder = gp.getGPConf().getPopulationSize() - newPopulation.size();
 
 		if (remainder > 0) {
+			// System.out.println("Adding in new individuals");
 			List<Chromosome> rest = new ArrayList<Chromosome>(gp.generatePopulation(remainder, newPopulation));
+			// System.out.println("Added in new individuals");
 			gp.evaluatePopulation(rest);
 			newPopulation.addAll(rest);
 		}
 
+		// System.out.println("Finished Iteration");
 		return newPopulation;
 	}
 

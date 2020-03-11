@@ -92,7 +92,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 			else if (((Node<?>) c).getReturnType() == Datatype.BOOLEAN) {
 				return new BooleanFitness(evals, (Node<VariableAssignment<Boolean>>) c).correct();
 			}
-			System.out.println(c.getClass());
+			// System.out.println(c.getClass());
 			throw new IllegalArgumentException(
 					"Could not calculate correctness for node of type " + ((Node<?>) c).getReturnType());
 		} catch (InterruptedException e) {
@@ -153,7 +153,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 				}
 			}
 		}
-//		System.out.println(" Challenger: " + best + " Challenger Fitness: " + best.getFitness());
+//		// System.out.println(" Challenger: " + best + " Challenger Fitness: " + best.getFitness());
 		return best;
 	}
 
@@ -177,7 +177,9 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 	@Override
 	public Chromosome evolve(int lim) {
 		assert (lim > 0);
+		// System.out.println("Generating population");
 		population = generatePopulation(getGPConf().getPopulationSize() - seeds.size());
+		// System.out.println("Generated population");
 
 		population.addAll(seeds);
 

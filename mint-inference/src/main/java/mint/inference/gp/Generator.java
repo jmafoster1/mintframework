@@ -126,7 +126,11 @@ public class Generator {
 			// We want to make sure the initial population is filled with unique individuals
 			// if we can. If there are no nonterminals then we can't do this.
 			if (!nonTerminals(type).isEmpty()) {
-				while (populationContains(population, instance) || populationContains(existing, instance)) {
+				int iteration = 0;
+				while ((populationContains(population, instance) || populationContains(existing, instance))
+						&& iteration < TIMEOUT) {
+					// System.out.println("individual: " + instance);
+					iteration++;
 					instance = generateRandomExpression(maxD + 1, type);
 				}
 			}
