@@ -25,25 +25,25 @@ public class SRPlayground {
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 
 		List<VariableAssignment<?>> i10 = new ArrayList<VariableAssignment<?>>();
-		i10.add(new IntegerVariableAssignment("i0", 10));
+		i10.add(new IntegerVariableAssignment("i0", 10l));
 
 		List<VariableAssignment<?>> i20 = new ArrayList<VariableAssignment<?>>();
-		i20.add(new IntegerVariableAssignment("i0", 20));
+		i20.add(new IntegerVariableAssignment("i0", 20l));
 
 		List<VariableAssignment<?>> i50 = new ArrayList<VariableAssignment<?>>();
-		i50.add(new IntegerVariableAssignment("i0", 50));
+		i50.add(new IntegerVariableAssignment("i0", 50l));
 
 		List<VariableAssignment<?>> i100 = new ArrayList<VariableAssignment<?>>();
-		i100.add(new IntegerVariableAssignment("i0", 100));
+		i100.add(new IntegerVariableAssignment("i0", 100l));
 
-		trainingSet.put(i50, new IntegerVariableAssignment("o1", 50));
-		trainingSet.put(i50, new IntegerVariableAssignment("o1", 100));
-		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100));
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 50l));
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 100l));
+		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100l));
 
-		trainingSet.put(i10, new IntegerVariableAssignment("o1", 10));
-		trainingSet.put(i20, new IntegerVariableAssignment("o1", 30));
-		trainingSet.put(i50, new IntegerVariableAssignment("o1", 70));
-		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100));
+		trainingSet.put(i10, new IntegerVariableAssignment("o1", 10l));
+		trainingSet.put(i20, new IntegerVariableAssignment("o1", 30l));
+		trainingSet.put(i50, new IntegerVariableAssignment("o1", 70l));
+		trainingSet.put(i100, new IntegerVariableAssignment("o1", 100l));
 
 		return trainingSet;
 	}

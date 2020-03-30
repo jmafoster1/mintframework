@@ -100,7 +100,7 @@ public class SingleOutputGP extends GP<VariableAssignment<?>> {
 				if (node.getReturnType() == Datatype.STRING)
 					fit = new StringFitness(evals, (Node<VariableAssignment<String>>) c);
 				else if (node.getReturnType() == Datatype.INTEGER)
-					fit = new IntegerFitness(evals, (Node<VariableAssignment<Integer>>) c);
+					fit = new IntegerFitness(evals, (Node<VariableAssignment<Long>>) c);
 				else {
 					assert (node.getReturnType() == Datatype.BOOLEAN);
 					fit = new BooleanFitness(evals, (Node<VariableAssignment<Boolean>>) c);

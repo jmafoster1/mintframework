@@ -11,19 +11,19 @@ import mint.tracedata.types.VariableAssignment;
 /**
  * Created by neilwalkinshaw on 05/03/15.
  */
-public class IntegerFitness extends LatentVariableFitness<Integer> {
+public class IntegerFitness extends LatentVariableFitness<Long> {
 
 	public IntegerFitness(MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> evals,
-			Node<VariableAssignment<Integer>> individual) {
+			Node<VariableAssignment<Long>> individual) {
 		super(evals, individual);
 	}
 
 	@Override
-	protected double distance(Integer actual, Object expected) throws InvalidDistanceException {
-		if (expected instanceof Integer) {
-			Integer exp = (Integer) expected;
+	protected double distance(Long actual, Object expected) throws InvalidDistanceException {
+		if (expected instanceof Long) {
+			Long exp = (Long) expected;
 
-			return Math.abs(actual.intValue() - exp.intValue());
+			return Math.abs(actual.longValue() - exp.longValue());
 		} else if (expected instanceof Double) {
 			Double exp = (Double) expected;
 			return Math.abs(actual.intValue() - exp.intValue());

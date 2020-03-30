@@ -29,7 +29,7 @@ public class SubtractIntegersOperator extends IntegerNonTerminal {
 	public IntegerVariableAssignment evaluate() throws InterruptedException {
 		checkInterrupted();
 		IntegerVariableAssignment res = copyResVar();
-		res.setValue((Integer) getChild(0).evaluate().getValue() - (Integer) getChild(1).evaluate().getValue());
+		res.setValue((Long) getChild(0).evaluate().getValue() - (Long) getChild(1).evaluate().getValue());
 		vals.add(res.getValue());
 		return res;
 	}

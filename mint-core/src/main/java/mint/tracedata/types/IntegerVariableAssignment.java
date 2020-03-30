@@ -8,54 +8,58 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-public class IntegerVariableAssignment extends NumberVariableAssignment<Integer> {
+public class IntegerVariableAssignment extends NumberVariableAssignment<Long> {
 	// Cannot use min and Integer.MAX_VAlUE because calculating their difference
 	// causes an arithmetic overflow
-	private final static int min = -1000;
-	private final static int max = 1000;
+	private final static long min = -1000;
+	private final static long max = 1000;
 
-	private static List<Integer> values = new ArrayList<Integer>();
+	private static List<Long> values = new ArrayList<Long>();
 
 	private final static Logger LOGGER = Logger.getLogger(IntegerVariableAssignment.class.getName());
 
-	protected static Map<String, Integer> constMap = new HashMap<String, Integer>();
+	protected static Map<String, Long> constMap = new HashMap<String, Long>();
 
-	private static int getMinVal(int given) {
+	private static long getMinVal(long given) {
 		if (constMap.isEmpty())
 			return given;
 		else
 			return 0;
 	}
 
-	private static int getMaxVal(int given) {
+	private static long getMaxVal(long given) {
 		if (constMap.isEmpty())
 			return given;
 		else
 			return constMap.size();
 	}
 
-	public static Map<String, Integer> getConstMap() {
+	public static Map<String, Long> getConstMap() {
 		return constMap;
 	}
 
-	public IntegerVariableAssignment(String name, Integer value) {
+	public IntegerVariableAssignment(String name, Long value) {
 		super(name, value, getMinVal(min), getMaxVal(max));
 		assert max > 0;
 	}
 
-	public IntegerVariableAssignment(String name, Integer value, boolean add) {
+	public IntegerVariableAssignment(String name, Long value, boolean add) {
 		super(name, value, getMinVal(min), getMaxVal(max));
 		if (add)
 			addValue(value);
 		assert max > 0;
 	}
 
-	public IntegerVariableAssignment(String name, Integer value, Integer min, Integer max) {
+	public IntegerVariableAssignment(String name, Long value, Long min, Long max) {
 		super(name, value, getMinVal(min), getMaxVal(max));
 		assert max > 0;
 	}
 
-	public IntegerVariableAssignment(String name, Integer min, Integer max) {
+	public IntegerVariableAssignment(String name, Long min, Long max) {
+		super(name, min, max);
+	}
+
+	public IntegerVariableAssignment(String name, Integer lowerLimit, Integer upperLimit) {
 		super(name, min, max);
 	}
 
@@ -64,7 +68,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 		assert max > 0;
 	}
 
-	public IntegerVariableAssignment(String name, Collection<Integer> from) {
+	public IntegerVariableAssignment(String name, Collection<Long> from) {
 		super(name, min, max, from);
 	}
 
@@ -76,13 +80,13 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 		} else {
 			try {
 				Double doubVal = Double.valueOf(s);
-				setToValue(doubVal.intValue());
+				setToValue(doubVal.longValue());
 			} catch (NumberFormatException nfe) {
 				LOGGER.warn("Variable " + name + " string " + s + " is not an integer. Setting to const.");
 				if (constMap.containsKey(s))
 					setToValue(constMap.get(s));
 				else {
-					constMap.put(s, constMap.size());
+					constMap.put(s, (long) constMap.size());
 					setToValue(constMap.get(s));
 				}
 			}
@@ -95,7 +99,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 		if (value == null)
 			return "NA";
 		else
-			return Integer.toString(value);
+			return Long.toString(value);
 	}
 
 	@Override
@@ -122,7 +126,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 	}
 
 	@Override
-	public VariableAssignment<Integer> copy() {
+	public VariableAssignment<Long> copy() {
 		IntegerVariableAssignment copied = new IntegerVariableAssignment(name, value, min, max);
 		copied.setParameter(isParameter());
 		if (isRestricted()) {
@@ -137,11 +141,11 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 	}
 
 	@Override
-	protected Integer generateRandom() {
+	protected Long generateRandom() {
 		if (!values.isEmpty())
 			return values.get(rand.nextInt(values.size()));
 		System.out.println("max:" + max + " min: " + min);
-		Integer retVal = min + rand.nextInt((max - min));
+		Long retVal = min + rand.nextInt((int) (max - min));
 		return retVal;
 	}
 
@@ -153,7 +157,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 	}
 
 	@Override
-	protected void setToValue(Integer value) {
+	protected void setToValue(Long value) {
 		super.setToValue(value);
 		if (enforcing) {
 			if (value > max)
@@ -164,17 +168,17 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Integer>
 	}
 
 	@Override
-	public List<Integer> getValues() {
+	public List<Long> getValues() {
 		return values;
 	}
 
 	@Override
-	public void addValue(Integer v) {
+	public void addValue(Long v) {
 		if (!values.contains(v))
 			values.add(v);
 	}
 
-	public static List<Integer> values() {
+	public static List<Long> values() {
 		return values;
 	}
 

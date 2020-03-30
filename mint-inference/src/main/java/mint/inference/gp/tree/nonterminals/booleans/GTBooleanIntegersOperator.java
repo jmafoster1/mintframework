@@ -55,7 +55,7 @@ public class GTBooleanIntegersOperator extends BooleanNonTerminal {
 	public BooleanVariableAssignment evaluate() throws InterruptedException {
 		checkInterrupted();
 		BooleanVariableAssignment res = new BooleanVariableAssignment("result",
-				(Integer) children.get(0).evaluate().getValue() > (Integer) children.get(1).evaluate().getValue());
+				(Long) children.get(0).evaluate().getValue() > (Long) children.get(1).evaluate().getValue());
 		vals.add(res.getValue());
 		return res;
 	}

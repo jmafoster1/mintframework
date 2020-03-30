@@ -38,9 +38,9 @@ public class CastIntegersOperator extends IntegerNonTerminal {
 		Double child = (Double) getChild(0).evaluate().getValue();
 		IntegerVariableAssignment iva = new IntegerVariableAssignment("result");
 		if (child.isInfinite() || child.isNaN()) {
-			iva.setValue(0);
+			iva.setValue(0l);
 		} else {
-			iva.setValue(child.intValue());
+			iva.setValue((long) child.intValue());
 		}
 		vals.add(iva);
 		return iva;

@@ -255,7 +255,7 @@ public class GPTestRunner extends TestRunner {
 		 * //doubleTerms.add(new DoubleVariableAssignmentTerminal(new
 		 * DoubleVariableAssignment("0.1",0.1D), true));
 		 */
-		Map<String, Integer> consts = IntegerVariableAssignment.getConstMap();
+		Map<String, Long> consts = IntegerVariableAssignment.getConstMap();
 		for (String i : IntegerVariableAssignment.getConstMap().keySet()) {
 			IntegerVariableAssignment var = new IntegerVariableAssignment(i, consts.get(i));
 			intTerms.add(new IntegerVariableAssignmentTerminal(var, true, false));

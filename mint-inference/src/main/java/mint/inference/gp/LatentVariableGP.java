@@ -88,7 +88,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 			if (((Node<?>) c).getReturnType() == Datatype.STRING)
 				return new StringFitness(evals, (Node<VariableAssignment<String>>) c).correct();
 			else if (((Node<?>) c).getReturnType() == Datatype.INTEGER)
-				return new IntegerFitness(evals, (Node<VariableAssignment<Integer>>) c).correct();
+				return new IntegerFitness(evals, (Node<VariableAssignment<Long>>) c).correct();
 			else if (((Node<?>) c).getReturnType() == Datatype.BOOLEAN) {
 				return new BooleanFitness(evals, (Node<VariableAssignment<Boolean>>) c).correct();
 			}
@@ -118,7 +118,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 		if (node.getReturnType() == Datatype.STRING)
 			return new StringFitness(evals, (Node<VariableAssignment<String>>) c);
 		else if (node.getReturnType() == Datatype.INTEGER)
-			return new IntegerFitness(evals, (Node<VariableAssignment<Integer>>) c);
+			return new IntegerFitness(evals, (Node<VariableAssignment<Long>>) c);
 		else {
 			assert (node.getReturnType() == Datatype.BOOLEAN);
 			return new BooleanFitness(evals, (Node<VariableAssignment<Boolean>>) c);

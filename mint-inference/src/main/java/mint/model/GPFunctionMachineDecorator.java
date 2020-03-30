@@ -231,18 +231,18 @@ public class GPFunctionMachineDecorator extends MachineDecorator {
 				intTerms.add(new IntegerVariableAssignmentTerminal(iv, false, false));
 			}
 		}
-		IntegerVariableAssignment dvar = new IntegerVariableAssignment("randA", -200);
+		IntegerVariableAssignment dvar = new IntegerVariableAssignment("randA", -200l);
 		dvar.setParameter(false);
-		dvar.setMax(2000);
-		dvar.setMin(-2000);
-		IntegerVariableAssignment dvar2 = new IntegerVariableAssignment("randB", 0);
+		dvar.setMax(2000l);
+		dvar.setMin(-2000l);
+		IntegerVariableAssignment dvar2 = new IntegerVariableAssignment("randB", 0l);
 		dvar2.setParameter(false);
-		dvar2.setMax(2000);
-		dvar2.setMin(-200);
-		IntegerVariableAssignment dvar3 = new IntegerVariableAssignment("randC", 200);
+		dvar2.setMax(2000l);
+		dvar2.setMin(-200l);
+		IntegerVariableAssignment dvar3 = new IntegerVariableAssignment("randC", 200l);
 		dvar3.setParameter(false);
-		dvar3.setMax(2000);
-		dvar3.setMin(-2000);
+		dvar3.setMax(2000l);
+		dvar3.setMin(-2000l);
 		// doubleTerms.add(new DoubleVariableAssignmentTerminal(new
 		// DoubleVariableAssignment("0.1",0.1D), true));
 		intTerms.add(new IntegerVariableAssignmentTerminal(dvar, true, false));

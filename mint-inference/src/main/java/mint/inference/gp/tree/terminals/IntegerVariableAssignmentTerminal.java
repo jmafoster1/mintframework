@@ -17,9 +17,9 @@ import mint.tracedata.types.VariableAssignment;
  */
 public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerVariableAssignment> {
 
-	protected int origVal;
+	protected long origVal;
 
-	public IntegerVariableAssignmentTerminal(VariableAssignment<Integer> var, boolean constant, boolean latent) {
+	public IntegerVariableAssignmentTerminal(VariableAssignment<Long> var, boolean constant, boolean latent) {
 		super(constant, latent);
 		if (var.getValue() != null)
 			origVal = var.getValue();
@@ -27,7 +27,7 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 	}
 
 	// For initialising constants
-	public IntegerVariableAssignmentTerminal(int value) {
+	public IntegerVariableAssignmentTerminal(long value) {
 		super(true, false);
 		IntegerVariableAssignment var = new IntegerVariableAssignment(String.valueOf(value), value, true);
 		this.terminal = var;
@@ -42,22 +42,22 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 
 	@Override
 	public void setValue(Object val) {
-		if (val instanceof Integer) {
-			Integer intval = (Integer) val;
+		if ((val instanceof Integer) || (val instanceof Long)) {
+			Long intval = (Long) val;
 			terminal.setValue(intval);
 		}
 	}
 
 	@Override
 	protected Terminal<IntegerVariableAssignment> getTermFromVals() {
-		IntegerVariableAssignment ivar = new IntegerVariableAssignment("res", (Integer) vals.iterator().next());
+		IntegerVariableAssignment ivar = new IntegerVariableAssignment("res", (Long) vals.iterator().next());
 		IntegerVariableAssignmentTerminal term = new IntegerVariableAssignmentTerminal(ivar, true, false);
 		return term;
 	}
 
 	@Override
 	public IntegerVariableAssignmentTerminal copy() {
-		VariableAssignment<Integer> copied = terminal.copy();
+		VariableAssignment<Long> copied = terminal.copy();
 		return new IntegerVariableAssignmentTerminal(copied, constant, LATENT);
 	}
 
@@ -71,7 +71,7 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 	public void reset() {
 		super.reset();
 		if (!isConstant()) {
-			terminal.setValue(0);
+			terminal.setValue(0l);
 		}
 	}
 

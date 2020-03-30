@@ -66,7 +66,7 @@ public class SymbolicGPTestGenerator extends GPModelTestGenerator {
 						val = ctx.mkReal(value.toString());
 					} else if (var.typeString().equals(":I")) {
 						IntegerVariableAssignment iva = (IntegerVariableAssignment) var;
-						Integer value = iva.getValue();
+						Long value = iva.getValue();
 						val = ctx.mkInt(value.toString());
 					} else
 						continue;

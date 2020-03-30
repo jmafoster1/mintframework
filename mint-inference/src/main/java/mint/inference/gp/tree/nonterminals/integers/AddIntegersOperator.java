@@ -29,8 +29,8 @@ public class AddIntegersOperator extends IntegerNonTerminal {
 		checkInterrupted();
 		IntegerVariableAssignment childRes1 = null;
 		IntegerVariableAssignment childRes2 = null;
-		Integer c1 = null;
-		Integer c2 = null;
+		Long c1 = null;
+		Long c2 = null;
 		try {
 			childRes1 = (IntegerVariableAssignment) getChild(0).evaluate();
 			childRes2 = (IntegerVariableAssignment) getChild(1).evaluate();

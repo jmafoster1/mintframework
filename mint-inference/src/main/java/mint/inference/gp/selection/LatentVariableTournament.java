@@ -41,7 +41,7 @@ public class LatentVariableTournament extends IOTournamentSelection<VariableAssi
 			return new BooleanFitness(evals, (Node<VariableAssignment<Boolean>>) toEvaluate);
 		else {
 			assert (toEvaluate.getReturnType() == Datatype.INTEGER);
-			return new IntegerFitness(evals, (Node<VariableAssignment<Integer>>) toEvaluate);
+			return new IntegerFitness(evals, (Node<VariableAssignment<Long>>) toEvaluate);
 		}
 	}
 

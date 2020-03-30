@@ -26,8 +26,10 @@ public class UpdateSRPlayground {
 	static MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 
 	private static void scenario(int i0, int r2, int r2_prime) {
-		trainingSet.put(Arrays.asList(new IntegerVariableAssignment("i0", i0), new IntegerVariableAssignment("r2", r2)),
-				new IntegerVariableAssignment("r2", r2_prime));
+		trainingSet.put(
+				Arrays.asList(new IntegerVariableAssignment("i0", (long) i0),
+						new IntegerVariableAssignment("r2", (long) r2)),
+				new IntegerVariableAssignment("r2", (long) r2_prime));
 	}
 
 	public static void main(String[] args) {
