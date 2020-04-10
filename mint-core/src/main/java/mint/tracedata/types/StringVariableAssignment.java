@@ -89,11 +89,22 @@ public class StringVariableAssignment extends VariableAssignment<String> {
 	}
 
 	@Override
-	// Either chop the first letter off or add a letter onto the end
+	// Either chop the first letter off or add a letter onto the end or replace with
+	// a new value from the set of values
 	public void fuzz() {
-		if (VariableAssignment.rand.nextDouble() > 0.5 && this.value.length() > 0)
-			this.value = this.value.substring(1);
-		else
+		switch (VariableAssignment.rand.nextInt(3)) {
+		case 0:
+			if (this.value.length() > 0)
+				this.value = this.value.substring(1);
+			else
+				this.value += (char) (VariableAssignment.rand.nextInt(26) + 'a');
+			break;
+		case 1:
 			this.value += (char) (VariableAssignment.rand.nextInt(26) + 'a');
+			break;
+		case 2:
+			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
+			break;
+		}
 	}
 }

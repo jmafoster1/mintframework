@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import mint.inference.evo.Chromosome;
 import mint.inference.gp.Generator;
@@ -71,7 +72,7 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 
 	@Override
 	public void mutate(Generator g, int depth) {
-		int type = g.getRandom().nextInt(6);
+		int type = g.getRandom().nextInt(7);
 		switch (type) {
 		case 0:
 			// HVL SUB
@@ -96,6 +97,13 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		case 5:
 			// mutate by replacing the entire tree with a subtree
 			swapWith(this.getRandomNode(g).copy());
+			break;
+		case 6:
+			// fuzz a terminal
+			List<Node<?>> terms = this.getAllNodesAsList().stream().filter(x -> x instanceof VariableTerminal)
+					.collect(Collectors.toList());
+			VariableTerminal<?> term = (VariableTerminal<?>) terms.get(g.getRandom().nextInt(terms.size()));
+			term.mutate(g, depth);
 			break;
 		}
 	}
