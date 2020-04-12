@@ -61,5 +61,4 @@ public abstract class VariableTerminal<T extends VariableAssignment<?>> extends 
 	public String typeString() {
 		return this.getTerminal().typeString();
 	}
-
 }
