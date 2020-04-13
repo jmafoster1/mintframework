@@ -76,7 +76,7 @@ public class MultiplyDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<DoubleVariableAssignment> newInstance() {
+	public NonTerminal<DoubleVariableAssignment> newInstance() {
 		return new MultiplyDoublesOperator();
 	}
 

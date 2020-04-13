@@ -68,7 +68,7 @@ public class SubtractDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<DoubleVariableAssignment> newInstance() {
+	public NonTerminal<DoubleVariableAssignment> newInstance() {
 		return new SubtractDoublesOperator();
 	}
 

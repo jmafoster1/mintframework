@@ -94,7 +94,7 @@ public class Generator {
 	// We need this function to simplify the top-level expression. Doing it within
 	// generateRandomExpressionAux simplifies the child expressions only
 	public Node<?> generateRandomExpression(int maxD, Datatype type) {
-		return generateRandomExpressionAux(maxD, type).simp();
+		return generateRandomExpressionAux(maxD, type);
 	}
 
 	public boolean populationContains(List<Chromosome> population, Chromosome c1) {
@@ -140,10 +140,7 @@ public class Generator {
 	}
 
 	public Node<? extends VariableAssignment<?>> selectRandomTerminal(List<VariableTerminal<?>> nodes) {
-		int index = rand.nextInt(nodes.size());
-		VariableTerminal<?> selected = nodes.get(index);
-
-		return selected.copy();
+		return nodes.get(rand.nextInt(nodes.size())).copy();
 	}
 
 	public List<NonTerminal<?>> nonTerminals(Datatype s) {
@@ -165,7 +162,17 @@ public class Generator {
 			throw new IllegalStateException(
 					"No suitable nonterminials for type signature " + Arrays.toString(typeSignature));
 
-		return suitable.get(rand.nextInt(suitable.size()));
+		return suitable.get(rand.nextInt(suitable.size())).newInstance();
+	}
+
+	public Node<?> generateRandomNonTerminal(NonTerminal<?> avoid, Datatype[] typeSignature) {
+		List<NonTerminal<?>> suitable = functions.stream()
+				.filter(f -> f.opString() != avoid.opString() && Datatype.typeChecks(f.typeSignature(), typeSignature))
+				.collect(Collectors.toList());
+		if (suitable.isEmpty())
+			return null;
+
+		return suitable.get(rand.nextInt(suitable.size())).newInstance();
 	}
 
 	public Node<?> generateRandomNonTerminal(Datatype typeSignature) {
@@ -174,6 +181,6 @@ public class Generator {
 		if (suitable.isEmpty())
 			throw new IllegalStateException("No suitable nonterminials for type signature " + typeSignature);
 
-		return suitable.get(rand.nextInt(suitable.size()));
+		return suitable.get(rand.nextInt(suitable.size())).newInstance();
 	}
 }

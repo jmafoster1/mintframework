@@ -72,7 +72,7 @@ public class LTBooleanIntegersOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new LTBooleanIntegersOperator();
 	}
 

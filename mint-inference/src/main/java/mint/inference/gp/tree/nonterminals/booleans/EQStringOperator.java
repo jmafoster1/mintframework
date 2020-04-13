@@ -69,7 +69,7 @@ public class EQStringOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new EQStringOperator();
 	}
 

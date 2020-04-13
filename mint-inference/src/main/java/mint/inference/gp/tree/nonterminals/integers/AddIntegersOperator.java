@@ -80,7 +80,7 @@ public class AddIntegersOperator extends IntegerNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<IntegerVariableAssignment> newInstance() {
+	public NonTerminal<IntegerVariableAssignment> newInstance() {
 		return new AddIntegersOperator();
 	}
 

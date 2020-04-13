@@ -80,7 +80,7 @@ public class MultiplyIntegersOperator extends IntegerNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<IntegerVariableAssignment> newInstance() {
+	public NonTerminal<IntegerVariableAssignment> newInstance() {
 		return new MultiplyIntegersOperator();
 	}
 

@@ -63,7 +63,7 @@ public class Iterate extends AbstractIterator {
 				return (parentA);
 			}
 			// LOGGER.debug("crossed with "+aCopy);
-			crossOverA.swapWith(crossOverB);
+			aCopy = aCopy.swap(crossOverA, crossOverB);
 
 		} catch (Exception e) {
 			e.printStackTrace();

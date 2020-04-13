@@ -142,6 +142,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Long> {
 
 	@Override
 	protected Long generateRandom() {
+		System.out.println("generateRandom");
 		if (!values.isEmpty())
 			return values.get(rand.nextInt(values.size()));
 		System.out.println("max:" + max + " min: " + min);

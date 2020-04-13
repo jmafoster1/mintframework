@@ -7,6 +7,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
 import mint.inference.gp.tree.Datatype;
+import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
 import mint.tracedata.types.IntegerVariableAssignment;
@@ -96,5 +97,10 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 	@Override
 	public Datatype[] typeSignature() {
 		return new Datatype[] { Datatype.INTEGER };
+	}
+
+	@Override
+	protected Node<IntegerVariableAssignment> newInstance() {
+		return new IntegerVariableAssignmentTerminal(terminal, constant, LATENT);
 	}
 }

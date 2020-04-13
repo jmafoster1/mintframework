@@ -107,7 +107,7 @@ public class RootListNonTerminal extends NonTerminal<ListVariableAssignment> {
 	}
 
 	@Override
-	protected NonTerminal<ListVariableAssignment> newInstance() {
+	public NonTerminal<ListVariableAssignment> newInstance() {
 		return new RootListNonTerminal(types);
 	}
 

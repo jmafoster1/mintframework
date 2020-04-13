@@ -56,7 +56,8 @@ public class NodeSimplifier {
 			return (Node<IntegerVariableAssignment>) makeBinary(exp.getArgs(), new MultiplyIntegersOperator());
 		}
 		if (exp.isIntNum()) {
-			IntegerVariableAssignment num = new IntegerVariableAssignment(exp.toString(), Long.valueOf(exp.toString()));
+			IntegerVariableAssignment num = new IntegerVariableAssignment(exp.toString(), Long.valueOf(exp.toString()),
+					false);
 			return new IntegerVariableAssignmentTerminal(num, true, false);
 		}
 		if (exp.isConst()) {

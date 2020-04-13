@@ -1,11 +1,8 @@
 package mint.inference.gp;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -38,17 +35,9 @@ public class SteadyStateIterator extends AbstractIterator {
 
 	@Override
 	protected Chromosome mutate(Chromosome root) {
-		root = root.copy();
-		List<Node<?>> nt = new ArrayList<Node<?>>();
+		Node<?> toMutate = (Node<?>) root;
 
-		addAllChildren((Node<?>) root, nt, null/* , maxDepth */);
-		removeUnviableNodes(nt);
-		if (nt.isEmpty())
-			return root;
-		Node<?> toMutate = pickRandomBiasEarly(nt, rand.nextDouble());
-
-		toMutate.mutate(gen, rand.nextInt(maxDepth - toMutate.depth()));
-		return root.simp();
+		return toMutate.mutate(gen, rand.nextInt(maxDepth - toMutate.depth())).simp();
 	}
 
 	@Override
@@ -65,7 +54,7 @@ public class SteadyStateIterator extends AbstractIterator {
 				return (parentA);
 			}
 			// LOGGER.debug("crossed with "+aCopy);
-			crossOverA.swapWith(crossOverB);
+			aCopy = aCopy.swap(crossOverA, crossOverB);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,15 +62,6 @@ public class SteadyStateIterator extends AbstractIterator {
 			LOGGER.debug(crossOverA + ", " + crossOverB);
 		}
 		return aCopy.simp();
-	}
-
-	protected void removeUnviableNodes(List<Node<?>> nt) {
-		Collection<Node<?>> toRemove = new HashSet<Node<?>>();
-		for (Node<?> n : nt) {
-			if (n.depth() >= maxDepth)
-				toRemove.add(n);
-		}
-		nt.removeAll(toRemove);
 	}
 
 	/**
@@ -94,13 +74,13 @@ public class SteadyStateIterator extends AbstractIterator {
 	 * @return
 	 */
 	protected Node<?> selectCrossOverPoint(Node<?> tree, Node<?> target) {
-		List<Node<?>> nt = new ArrayList<Node<?>>();
+		List<Node<?>> nt = tree.getAllNodesAsList().stream().filter(x -> x.getReturnType() == tree.getReturnType())
+				.collect(Collectors.toList());
+		nt.remove(tree);
 //		int depth = maxDepth;
 //		if (target != null)
 //			depth = maxDepth - target.depth();
-		addAllChildren(tree, nt, target/* , depth */); // only add nodes that are same type as target
 		Node<?> picked = null;
-		removeUnviableNodes(nt);
 		double which = rand.nextDouble();
 		if (nt.isEmpty())
 			return null;
@@ -155,44 +135,6 @@ public class SteadyStateIterator extends AbstractIterator {
 			probs[i] = probs[i] / sum;
 		}
 		return probs;
-	}
-
-	/**
-	 * Add children to to nt that could feasibly be candidates for crossover. For
-	 * this their subtree depth must be < childMaxDepth, and they must be of the
-	 * same type as target.
-	 *
-	 * @param tree
-	 * @param nt
-	 * @param target
-	 */
-	protected void addAllChildren(Node<?> tree, List<Node<?>> nt, Node<?> target) {
-		Stack<Node<?>> worklist = new Stack<Node<?>>();
-		for (Node<?> child : tree.getChildren()) {
-			worklist.push(child);
-			if (target != null) {
-				if (!target.getReturnType().equals(child.getReturnType()))
-					continue;
-			}
-			nt.add(child);
-			Collections.shuffle(nt, rand);
-		}
-		while (!worklist.isEmpty()) {
-			List<Node<?>> toAdd = new ArrayList<Node<?>>();
-			List<Node<?>> forThisDepth = new ArrayList<Node<?>>();
-			Node<?> c = worklist.pop();
-			for (Node<?> child : c.getChildren()) {
-				toAdd.add(child);
-				if (target != null) {
-					if (!target.getReturnType().equals(child.getReturnType()))
-						continue;
-				}
-				forThisDepth.add(child);
-			}
-			Collections.shuffle(forThisDepth, rand);
-			nt.addAll(forThisDepth);
-			worklist.addAll(toAdd);
-		}
 	}
 
 	@Override

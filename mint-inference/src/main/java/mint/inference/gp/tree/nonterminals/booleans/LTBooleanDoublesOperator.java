@@ -71,7 +71,7 @@ public class LTBooleanDoublesOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new LTBooleanDoublesOperator();
 	}
 

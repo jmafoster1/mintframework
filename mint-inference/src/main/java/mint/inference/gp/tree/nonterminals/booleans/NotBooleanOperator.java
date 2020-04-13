@@ -64,7 +64,7 @@ public class NotBooleanOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new NotBooleanOperator();
 	}
 

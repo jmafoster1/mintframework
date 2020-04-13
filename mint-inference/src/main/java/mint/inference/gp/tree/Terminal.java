@@ -57,19 +57,17 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 	}
 
 	@Override
-	protected List<Node<?>> getAllNodesAsList() {
+	public List<Node<?>> getAllNodesAsList() {
 		List<Node<?>> nodes = new ArrayList<Node<?>>();
 		nodes.add(this);
 		return nodes;
 	}
 
 	@Override
-	public void mutate(Generator g, int depth) {
+	public Node<?> mutate(Generator g, int depth) {
 		if (this.isConstant()) {
 			terminal.fuzz();
-		} else if (!this.isConstant()) {
-			this.mutateByGrowth(g);
-
 		}
+		return this;
 	}
 }

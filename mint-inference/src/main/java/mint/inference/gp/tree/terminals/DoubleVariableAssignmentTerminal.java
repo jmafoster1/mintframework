@@ -7,6 +7,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
 import mint.inference.gp.tree.Datatype;
+import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
 import mint.tracedata.types.DoubleVariableAssignment;
@@ -85,5 +86,10 @@ public class DoubleVariableAssignmentTerminal extends VariableTerminal<DoubleVar
 	@Override
 	public Datatype[] typeSignature() {
 		return new Datatype[] { Datatype.DOUBLE };
+	}
+
+	@Override
+	protected Node<DoubleVariableAssignment> newInstance() {
+		return new DoubleVariableAssignmentTerminal(terminal, constant, LATENT);
 	}
 }

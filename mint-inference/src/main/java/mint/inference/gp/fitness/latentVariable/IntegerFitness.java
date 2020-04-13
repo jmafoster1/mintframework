@@ -26,8 +26,15 @@ public class IntegerFitness extends LatentVariableFitness<Long> {
 			return Math.abs(actual.longValue() - exp.longValue());
 		} else if (expected instanceof Double) {
 			Double exp = (Double) expected;
+			return Math.abs(actual.doubleValue() - exp.doubleValue());
+		} else if (expected instanceof Integer) {
+			Integer exp = (Integer) expected;
 			return Math.abs(actual.intValue() - exp.intValue());
-		} else
+		} else {
+			System.out.println(expected.getClass());
+			System.out.println("expected: " + expected + " actual: " + actual);
+			System.exit(1);
 			throw new InvalidDistanceException();
+		}
 	}
 }

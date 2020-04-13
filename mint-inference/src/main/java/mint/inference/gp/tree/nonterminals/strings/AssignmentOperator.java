@@ -56,7 +56,7 @@ public class AssignmentOperator extends StringNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<StringVariableAssignment> newInstance() {
+	public NonTerminal<StringVariableAssignment> newInstance() {
 		return new AssignmentOperator(identifier);
 	}
 

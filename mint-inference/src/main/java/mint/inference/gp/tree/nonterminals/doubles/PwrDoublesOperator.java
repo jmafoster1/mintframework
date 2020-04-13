@@ -68,7 +68,7 @@ public class PwrDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<DoubleVariableAssignment> newInstance() {
+	public NonTerminal<DoubleVariableAssignment> newInstance() {
 		return new PwrDoublesOperator();
 	}
 

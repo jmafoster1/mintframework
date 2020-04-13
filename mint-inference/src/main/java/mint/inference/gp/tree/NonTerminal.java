@@ -20,6 +20,8 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 
 	protected List<Node<?>> children;
 
+	private final int MAX_MUTATIONS = 3;
+
 	public void setChildren(List<Node<?>> newChildren) {
 		this.children = newChildren;
 	}
@@ -53,13 +55,13 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		return children;
 	}
 
+	@Override
 	public void addChild(Node<?> child) {
 		children.add(child);
-		child.setParent(this);
 	}
 
 	@Override
-	protected List<Node<?>> getAllNodesAsList() {
+	public List<Node<?>> getAllNodesAsList() {
 		List<Node<?>> nodes = new ArrayList<Node<?>>();
 		nodes.add(this);
 
@@ -71,66 +73,81 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	}
 
 	@Override
-	public void mutate(Generator g, int depth) {
-		int type = g.getRandom().nextInt(7);
-		switch (type) {
-		case 0:
-			// HVL SUB
-			mutateByRandomChangeOfFunction(g);
-			break;
-		case 1:
-			mutateByDeletion(g);
-			break;
-		case 2:
-			// HVL ADD
-			this.mutateByGrowth(g);
-			break;
-		case 3:
-			// Reverse children if they have the same return type, e.g. (x - y) -> (y - x)
-			if (this.children.stream().map(child -> child.getReturnType()).distinct().limit(2).count() <= 1)
-				Collections.reverse(this.children);
-			break;
-		case 4:
-			// HVL DEL
-			mutateByRandomChangeOfNodeToChild(g);
-			break;
-		case 5:
-			// mutate by replacing the entire tree with a subtree
-			swapWith(this.getRandomNode(g).copy());
-			break;
-		case 6:
-			// fuzz a terminal
-			List<Node<?>> terms = this.getAllNodesAsList().stream().filter(x -> x instanceof VariableTerminal)
-					.collect(Collectors.toList());
-			VariableTerminal<?> term = (VariableTerminal<?>) terms.get(g.getRandom().nextInt(terms.size()));
-			term.mutate(g, depth);
-			break;
+	public Node<?> mutate(Generator g, int depth) {
+		// System.out.println("============================================");
+		// System.out.println("Mutating " + this);
+		int mutations = 0;
+		Node<?> newNode = this;
+		boolean mutate = true;
+		while (mutate && mutations < MAX_MUTATIONS) {
+			mutate = g.getRandom().nextBoolean();
+			// System.out.println("Iteration: " + mutations);
+			mutations++;
+			int choices = 6;
+			switch (g.getRandom().nextInt(choices)) {
+			case 0:
+				// HVL SUB
+				// System.out.println(" mutateByRandomChangeOfFunction " + this + " ");
+				newNode = mutateByRandomChangeOfFunction(g);
+				break;
+			case 1:
+				// HLV DEL
+				// System.out.println(" mutateByDeletion " + this + " ");
+				newNode = mutateByDeletion(g);
+				break;
+			case 2:
+				// HVL INS
+				// System.out.println(" mutateByGrowth " + this + " ");
+				newNode = mutateByGrowth(g);
+				break;
+			case 3:
+				// Reverse children if they have the same return type, e.g. (x - y) -> (y - x)
+				// System.out.println(" reverseChildren " + this + " ");
+				if (this.children.stream().map(child -> child.getReturnType()).distinct().limit(2).count() <= 1)
+					Collections.reverse(this.children);
+				break;
+			case 4:
+				// mutate by replacing the entire tree with a subtree
+				// System.out.println(" Subtree " + this + " ");
+				Node<?> subtree = this.getRandomNode(g);
+				newNode = swap(this, subtree);
+				break;
+			case 5:
+				// fuzz a terminal
+				List<Node<?>> terms = this.getAllNodesAsList().stream().filter(x -> x instanceof VariableTerminal)
+						.collect(Collectors.toList());
+				VariableTerminal<?> term = (VariableTerminal<?>) terms.get(g.getRandom().nextInt(terms.size()));
+				// System.out.println(" fuzzTerminal " + term + " in " + this + " ");
+				term.getTerminal().fuzz();
+				break;
+			}
+			// System.out.println(" " + newNode);
 		}
+		// System.out.println("============================================");
+		return newNode;
 	}
 
-	private void mutateByRandomChangeOfFunction(Generator g) {
+	private Node<?> mutateByRandomChangeOfFunction(Generator g) {
 		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
-			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(this.typeSignature());
+			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(this, this.typeSignature());
+			if (newFun == null)
+				return this;
 			newFun.setChildren(this.children);
-			this.swapWith(newFun);
-		}
-	}
-
-	private void mutateByDeletion(Generator g) {
-		if (!this.children.isEmpty()) {
-			Node<?> child = this.getChild(g.getRandom().nextInt(this.children.size()));
-			child.swapWith(g.generateRandomTerminal(child.getReturnType()));
-		}
-	}
-
-	private void mutateByRandomChangeOfNodeToChild(Generator g) {
-		Node<?> mutatingNode = this.getRandomNode(g);
-		if (!mutatingNode.getChildren().isEmpty()) {
-			int indx = g.getRandom().nextInt(mutatingNode.getChildren().size());
-			mutatingNode.swapWith(mutatingNode.getChildren().get(indx));
+			return newFun;
 		} else {
-			this.mutateByRandomChangeOfFunction(g);
+			// System.out.println(" same");
+			return this;
 		}
+	}
+
+	private Node<?> mutateByDeletion(Generator g) {
+		List<Node<?>> nodes = this.getAllNodesAsList().stream().filter(x -> x.getReturnType() == this.getReturnType())
+				.collect(Collectors.toList());
+		if (nodes.isEmpty())
+			return this;
+
+		Node<?> child = nodes.get(g.getRandom().nextInt(nodes.size()));
+		return swap(this, child);
 	}
 
 	public abstract NonTerminal<T> createInstance(Generator g, int depth);
@@ -218,7 +235,8 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		return copy;
 	}
 
-	protected abstract NonTerminal<T> newInstance();
+	@Override
+	public abstract NonTerminal<T> newInstance();
 
 	@Override
 	@SuppressWarnings("unchecked")

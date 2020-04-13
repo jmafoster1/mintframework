@@ -1,6 +1,7 @@
 package mint.inference.gp.tree.terminals;
 
 import mint.inference.evo.Chromosome;
+import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.Terminal;
 import mint.tracedata.types.VariableAssignment;
 
@@ -60,5 +61,10 @@ public abstract class VariableTerminal<T extends VariableAssignment<?>> extends 
 
 	public String typeString() {
 		return this.getTerminal().typeString();
+	}
+
+	@Override
+	protected void addChild(Node<?> swap) {
+		// No children to add to
 	}
 }

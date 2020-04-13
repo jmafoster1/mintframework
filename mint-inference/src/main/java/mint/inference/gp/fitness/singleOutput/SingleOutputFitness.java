@@ -62,8 +62,8 @@ public abstract class SingleOutputFitness<T> extends Fitness {
 			} catch (InvalidDistanceException e) {
 				penaltyFactor = 100;
 			}
-			if (individual.subTreeMaxdepth() > maxDepth)
-				penaltyFactor = Math.abs((individual.subTreeMaxdepth() - maxDepth) * 2);
+			if (individual.depth() > maxDepth)
+				penaltyFactor = Math.abs((individual.depth() - maxDepth) * 2);
 
 			distances.add(distance);
 		}

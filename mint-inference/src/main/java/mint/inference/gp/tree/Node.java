@@ -3,13 +3,13 @@ package mint.inference.gp.tree;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
 import mint.inference.evo.Chromosome;
 import mint.inference.gp.Generator;
-import mint.inference.gp.tree.nonterminals.lists.RootListNonTerminal;
 import mint.inference.gp.tree.nonterminals.strings.AssignmentOperator;
 import mint.inference.gp.tree.terminals.VariableTerminal;
 import mint.tracedata.types.VariableAssignment;
@@ -32,16 +32,10 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 
 	protected AssignmentOperator def;
 
-	protected NonTerminal<?> parent;
-
 	protected Set<Object> vals = new HashSet<Object>();
 
 	public Node() {
 		id = ids++;
-	}
-
-	public NonTerminal<?> getParent() {
-		return parent;
 	}
 
 	public AssignmentOperator getDef() {
@@ -60,10 +54,6 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 
 	public abstract boolean accept(NodeVisitor visitor) throws InterruptedException;
 
-	protected void setParent(NonTerminal<?> parent) {
-		this.parent = parent;
-	}
-
 	public abstract List<Node<?>> getChildren();
 
 	public abstract T evaluate() throws InterruptedException;
@@ -71,20 +61,28 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 	@Override
 	public abstract Node<T> copy();
 
-	public abstract void mutate(Generator g, int depth);
+	public abstract Node<?> mutate(Generator g, int depth);
 
-	public boolean swapWith(Node<?> alternative) {
-		assert (!(this instanceof RootListNonTerminal));
-		if (parent == null) {
-			return false;
+	public Node<?> swap(Node<?> oldNode, Node<?> newNode) {
+		if (oldNode == this) {
+			return newNode;
 		}
-		if (!alternative.getReturnType().equals(getReturnType()))
-			return false;
-		int thisIndex = parent.getChildren().indexOf(this);
-		parent.getChildren().set(thisIndex, alternative);
-		alternative.setParent(parent);
-		return true;
+
+		Node<T> n = this.newInstance();
+		for (Node<?> c : this.getChildren()) {
+			if (c == oldNode)
+				n.addChild(newNode);
+			else
+				n.addChild(c.swap(oldNode, newNode));
+		}
+//		if (parent == null)
+//			System.out.println("swapping " + oldNode + " with " + newNode + " in " + this + " to make " + n);
+		return n;
 	}
+
+	protected abstract void addChild(Node<?> swap);
+
+	protected abstract Node<T> newInstance();
 
 	public Datatype getReturnType() {
 		return this.typeSignature()[this.typeSignature().length - 1];
@@ -114,45 +112,11 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 
 	public abstract int size();
 
-	/**
-	 * Returns the depth of this specific node within the tree.
-	 * 
-	 * @return
-	 */
-	public int depth() {
-		if (parent == null)
-			return 0;
-		else
-			return 1 + parent.depth();
-	}
-
 	protected void checkInterrupted() throws InterruptedException {
 		if (Thread.interrupted()) {
 			throw new InterruptedException();
 		}
 
-	}
-
-	/**
-	 * Returns the maximum depth of the subtree of which this node is the root.
-	 * 
-	 * @return
-	 */
-	public int subTreeMaxdepth() {
-		int maxDepth = 0;
-		if (getChildren().isEmpty())
-			maxDepth = depth();
-		else {
-
-			for (Node<?> child : getChildren()) {
-				int childMaxDepth = child.subTreeMaxdepth();
-				if (childMaxDepth > maxDepth) {
-					maxDepth = childMaxDepth;
-				}
-			}
-
-		}
-		return maxDepth;
 	}
 
 	public abstract Set<VariableTerminal<?>> varsInTree();
@@ -172,7 +136,6 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		} finally {
 			ctx.close();
 		}
-
 	}
 
 	@Override
@@ -190,31 +153,38 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		return fit.compareTo(arg0.fitness);
 	}
 
-	protected abstract List<Node<?>> getAllNodesAsList();
+	public abstract List<Node<?>> getAllNodesAsList();
 
 	public abstract Datatype[] typeSignature();
 
 	protected Node<?> getRandomNode(Generator g) {
-		List<Node<?>> allNodesOfTree = this.getAllNodesAsList();
+		List<Node<?>> allNodesOfTree = this.getAllNodesAsList().stream()
+				.filter(x -> x.getReturnType() == this.getReturnType()).collect(Collectors.toList());
 		int allNodesOfTreeCount = allNodesOfTree.size();
 		int indx = g.getRandom().nextInt(allNodesOfTreeCount);
 		return allNodesOfTree.get(indx);
 	}
 
-	protected void mutateByGrowth(Generator g) {
-		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
-			Node<?> mutationPoint = this.getRandomNode(g);
-			NonTerminal<?> newRoot = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint.getReturnType());
-			boolean thisAdded = false;
-			for (Datatype type : newRoot.typeSignature()) {
-				if (type == mutationPoint.getReturnType() && !thisAdded) {
-					newRoot.addChild(mutationPoint.copy());
-					thisAdded = true;
-				} else
-					newRoot.addChild(g.generateRandomTerminal(type));
+	public int depth() {
+		int max = 1;
+		for (Node<?> c : getChildren()) {
+			int cd = c.depth();
+			if (cd > max) {
+				max = cd;
 			}
-			mutationPoint.swapWith(newRoot);
 		}
+		return max;
+	}
+
+	protected Node<?> mutateByGrowth(Generator g) {
+		Node<?> mutationPoint = this.getRandomNode(g);
+		Node<?> newTree = g.generateRandomExpression(this.depth(), mutationPoint.getReturnType());
+
+		return swap(mutationPoint, newTree);
+	}
+
+	public Node<?> randomChild(Generator g) {
+		return getChildren().get(g.getRandom().nextInt(getChildren().size()));
 	}
 
 }

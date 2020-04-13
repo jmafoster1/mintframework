@@ -83,7 +83,7 @@ public class IfThenElseIntegerOperator extends NonTerminal<VariableAssignment<?>
 	}
 
 	@Override
-	protected NonTerminal<VariableAssignment<?>> newInstance() {
+	public NonTerminal<VariableAssignment<?>> newInstance() {
 		return new IfThenElseIntegerOperator();
 	}
 

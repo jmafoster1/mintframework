@@ -69,7 +69,7 @@ public class CastDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<DoubleVariableAssignment> newInstance() {
+	public NonTerminal<DoubleVariableAssignment> newInstance() {
 		return new CastDoublesOperator();
 	}
 

@@ -8,6 +8,7 @@ import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
 
 import mint.inference.gp.tree.Datatype;
+import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
 import mint.tracedata.types.StringVariableAssignment;
@@ -77,5 +78,10 @@ public class StringVariableAssignmentTerminal extends VariableTerminal<StringVar
 	@Override
 	public Datatype[] typeSignature() {
 		return new Datatype[] { Datatype.STRING };
+	}
+
+	@Override
+	protected Node<StringVariableAssignment> newInstance() {
+		return new StringVariableAssignmentTerminal(terminal, constant, LATENT);
 	}
 }

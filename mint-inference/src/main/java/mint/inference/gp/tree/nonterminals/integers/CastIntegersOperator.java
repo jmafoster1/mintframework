@@ -72,7 +72,7 @@ public class CastIntegersOperator extends IntegerNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<IntegerVariableAssignment> newInstance() {
+	public NonTerminal<IntegerVariableAssignment> newInstance() {
 		return new CastIntegersOperator();
 	}
 

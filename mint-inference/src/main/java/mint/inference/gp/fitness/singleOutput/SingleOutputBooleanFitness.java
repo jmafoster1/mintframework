@@ -59,7 +59,7 @@ public class SingleOutputBooleanFitness extends SingleOutputFitness<Boolean> {
 			}
 		}
 
-		if (individual.subTreeMaxdepth() > maxDepth)
+		if (individual.depth() > maxDepth)
 			penalize = true;
 
 		if (penalize)

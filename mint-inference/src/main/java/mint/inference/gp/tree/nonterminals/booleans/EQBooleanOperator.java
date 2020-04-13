@@ -65,7 +65,7 @@ public class EQBooleanOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new EQBooleanOperator();
 	}
 

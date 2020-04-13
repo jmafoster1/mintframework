@@ -65,7 +65,7 @@ public class CosDoublesOperator extends DoubleNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<DoubleVariableAssignment> newInstance() {
+	public NonTerminal<DoubleVariableAssignment> newInstance() {
 		return new CosDoublesOperator();
 	}
 

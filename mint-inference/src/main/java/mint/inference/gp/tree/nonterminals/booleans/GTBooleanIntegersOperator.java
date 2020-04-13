@@ -71,7 +71,7 @@ public class GTBooleanIntegersOperator extends BooleanNonTerminal {
 	}
 
 	@Override
-	protected NonTerminal<BooleanVariableAssignment> newInstance() {
+	public NonTerminal<BooleanVariableAssignment> newInstance() {
 		return new GTBooleanIntegersOperator();
 	}
 

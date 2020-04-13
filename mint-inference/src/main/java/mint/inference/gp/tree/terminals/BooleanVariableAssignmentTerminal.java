@@ -7,6 +7,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
 import mint.inference.gp.tree.Datatype;
+import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.Terminal;
 import mint.tracedata.types.BooleanVariableAssignment;
@@ -75,6 +76,11 @@ public class BooleanVariableAssignmentTerminal extends VariableTerminal<BooleanV
 	@Override
 	public Datatype[] typeSignature() {
 		return new Datatype[] { Datatype.BOOLEAN };
+	}
+
+	@Override
+	protected Node<BooleanVariableAssignment> newInstance() {
+		return new BooleanVariableAssignmentTerminal(terminal, constant, LATENT);
 	}
 
 }
