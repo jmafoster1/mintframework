@@ -22,7 +22,6 @@ public class IntegerFitness extends LatentVariableFitness<Long> {
 	protected double distance(Long actual, Object expected) throws InvalidDistanceException {
 		if (expected instanceof Long) {
 			Long exp = (Long) expected;
-
 			return Math.abs(actual.longValue() - exp.longValue());
 		} else if (expected instanceof Double) {
 			Double exp = (Double) expected;
@@ -31,10 +30,7 @@ public class IntegerFitness extends LatentVariableFitness<Long> {
 			Integer exp = (Integer) expected;
 			return Math.abs(actual.intValue() - exp.intValue());
 		} else {
-			System.out.println(expected.getClass());
-			System.out.println("expected: " + expected + " actual: " + actual);
-			System.exit(1);
-			throw new InvalidDistanceException();
+			return Double.POSITIVE_INFINITY;
 		}
 	}
 }
