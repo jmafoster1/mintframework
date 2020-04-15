@@ -192,15 +192,15 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 
 		AbstractIterator it = getIterator(population);
 		for (int i = 1; i <= lim; i++) {
+			if (fittest.getFitness() <= 0D)
+				return fittest;
+
 			population = it.iterate(this);
 
 			fittest = chooseBest(population);
 
 			LOGGER.debug("GP iteration: " + i + " - best individual: " + fittest + " fitness: " + fittest.getFitness()
 					+ " New population: " + popInfo());
-
-			if (fittest.getFitness() <= 0D)
-				break;
 
 			it = getIterator(population);
 		}
