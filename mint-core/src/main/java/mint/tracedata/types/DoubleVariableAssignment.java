@@ -152,4 +152,8 @@ public class DoubleVariableAssignment extends NumberVariableAssignment<Double> {
 		}
 	}
 
+	public static void clearValues() {
+		values.clear();
+	}
+
 }

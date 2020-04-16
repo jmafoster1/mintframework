@@ -107,4 +107,8 @@ public class StringVariableAssignment extends VariableAssignment<String> {
 			break;
 		}
 	}
+
+	public static void clearValues() {
+		values.clear();
+	}
 }

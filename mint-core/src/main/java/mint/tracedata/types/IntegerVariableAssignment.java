@@ -198,4 +198,8 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Long> {
 		}
 	}
 
+	public static void clearValues() {
+		values.clear();
+	}
+
 }

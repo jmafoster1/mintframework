@@ -113,4 +113,8 @@ public class ListVariableAssignment extends VariableAssignment<List<?>> {
 	public void fuzz() {
 	}
 
+	public static void clearValues() {
+		values.clear();
+	}
+
 }

@@ -77,4 +77,8 @@ public class BooleanVariableAssignment extends VariableAssignment<Boolean> {
 		this.value = !this.value;
 	}
 
+	public static void clearValues() {
+		values.clear();
+	}
+
 }
