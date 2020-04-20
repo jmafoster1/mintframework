@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
@@ -69,6 +70,8 @@ public class GuardSRPlayground {
 		intNonTerms.add(new AddIntegersOperator());
 		intNonTerms.add(new SubtractIntegersOperator());
 		gpGenerator.addFunctions(intNonTerms);
+
+		List<VariableTerminal<?>> test = integerTerms.stream().filter(x -> x.isConstant()).collect(Collectors.toList());
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>();
 
