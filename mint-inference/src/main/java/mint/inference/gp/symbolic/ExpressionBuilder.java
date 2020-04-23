@@ -139,7 +139,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(EQBooleanOperator eqBooleanOperator) throws InterruptedException {
 		try {
 			BoolExpr ex = null;
-			if (eqBooleanOperator.numVarsInTree() == 0) {
+			if (eqBooleanOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(eqBooleanOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkEq(findExpr(eqBooleanOperator.getChildren().get(0)),
@@ -164,7 +164,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(AndBooleanOperator andBooleanOperator) {
 		try {
 			BoolExpr ex = null;
-			if (andBooleanOperator.numVarsInTree() == 0) {
+			if (andBooleanOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(andBooleanOperator.evaluate().getValue());
 			} else {
 				BoolExpr[] ands = new BoolExpr[] { findExpr(andBooleanOperator.getChildren().get(0)),
@@ -191,7 +191,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(GTBooleanDoublesOperator gtBooleanDoublesOperator) {
 		try {
 			BoolExpr ex = null;
-			if (gtBooleanDoublesOperator.numVarsInTree() == 0) {
+			if (gtBooleanDoublesOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(gtBooleanDoublesOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkGt(findArithExpr(gtBooleanDoublesOperator.getChildren().get(0)),
@@ -217,7 +217,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(LTBooleanDoublesOperator ltBooleanDoublesOperator) {
 		try {
 			BoolExpr ex = null;
-			if (ltBooleanDoublesOperator.numVarsInTree() == 0) {
+			if (ltBooleanDoublesOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(ltBooleanDoublesOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkLt(findArithExpr(ltBooleanDoublesOperator.getChildren().get(0)),
@@ -244,7 +244,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(OrBooleanOperator orBooleanOperator) {
 		try {
 			BoolExpr ex = null;
-			if (orBooleanOperator.numVarsInTree() == 0) {
+			if (orBooleanOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(orBooleanOperator.evaluate().getValue());
 			} else {
 				BoolExpr[] ors = new BoolExpr[] { findExpr(orBooleanOperator.getChildren().get(0)),
@@ -270,7 +270,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(CastIntegersOperator integerNonTerminal) {
 		ArithExpr ex = null;
-		if (integerNonTerminal.numVarsInTree() == 0) {
+		if (integerNonTerminal.varsInTree().size() == 0) {
 			try {
 				ex = ctx.mkReal(integerNonTerminal.evaluate().getValue().toString());
 			} catch (Z3Exception e) {
@@ -341,7 +341,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(DivideDoublesOperator divideDoublesOperator) {
 		ArithExpr ex = null;
-		if (divideDoublesOperator.numVarsInTree() == 0) {
+		if (divideDoublesOperator.varsInTree().size() == 0) {
 			String val = null;
 			try {
 				val = divideDoublesOperator.evaluate().getValue().toString();
@@ -378,7 +378,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(AddDoublesOperator addDoublesOperator) {
 
 		ArithExpr ex = null;
-		if (addDoublesOperator.numVarsInTree() == 0) {
+		if (addDoublesOperator.varsInTree().size() == 0) {
 			try {
 				String val = addDoublesOperator.evaluate().getValue().toString();
 				if (val.equals("Infinity")) {
@@ -413,7 +413,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(CastDoublesOperator castDoublesOperator) {
 		ArithExpr ex = null;
-		if (castDoublesOperator.numVarsInTree() == 0) {
+		if (castDoublesOperator.varsInTree().size() == 0) {
 			try {
 				ex = ctx.mkInt(castDoublesOperator.evaluate().getValue().toString());
 			} catch (Z3Exception e) {
@@ -437,7 +437,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(CosDoublesOperator cosDoublesOperator) {
 		ArithExpr ex = null;
-		if (cosDoublesOperator.numVarsInTree() == 0) {
+		if (cosDoublesOperator.varsInTree().size() == 0) {
 			try {
 				String val = cosDoublesOperator.evaluate().getValue().toString();
 				if (val.equals("Infinity") || val.equals("NaN")) {
@@ -487,7 +487,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(MultiplyDoublesOperator multiplyDoublesOperator) {
 		ArithExpr ex = null;
-		if (multiplyDoublesOperator.numVarsInTree() == 0) {
+		if (multiplyDoublesOperator.varsInTree().size() == 0) {
 			try {
 				String val = multiplyDoublesOperator.evaluate().getValue().toString();
 				if (val.equals("Infinity") || val.equals("NaN")) {
@@ -522,7 +522,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(PwrDoublesOperator pwrDoublesOperator) {
 		ArithExpr ex = null;
-		if (pwrDoublesOperator.numVarsInTree() == 0) {
+		if (pwrDoublesOperator.varsInTree().size() == 0) {
 			try {
 				String val = pwrDoublesOperator.evaluate().getValue().toString();
 				if (val.equals("Infinity") || val.equals("NaN")) {
@@ -568,7 +568,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	@Override
 	public boolean visitExit(SubtractDoublesOperator subtractDoublesOperator) {
 		ArithExpr ex = null;
-		if (subtractDoublesOperator.numVarsInTree() == 0) {
+		if (subtractDoublesOperator.varsInTree().size() == 0) {
 			try {
 				ex = ctx.mkSub(new ArithExpr[] { findArithExpr(subtractDoublesOperator.getChildren().get(0)),
 						findArithExpr(subtractDoublesOperator.getChildren().get(1)) });
@@ -778,7 +778,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(GTBooleanIntegersOperator gtBooleanIntegersOperator) {
 		try {
 			BoolExpr ex = null;
-			if (gtBooleanIntegersOperator.numVarsInTree() == 0) {
+			if (gtBooleanIntegersOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(gtBooleanIntegersOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkGt(findArithExpr(gtBooleanIntegersOperator.getChildren().get(0)),
@@ -804,7 +804,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(LTBooleanIntegersOperator ltBooleanIntegersOperator) {
 		try {
 			BoolExpr ex = null;
-			if (ltBooleanIntegersOperator.numVarsInTree() == 0) {
+			if (ltBooleanIntegersOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(ltBooleanIntegersOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkLt(findArithExpr(ltBooleanIntegersOperator.getChildren().get(0)),
@@ -831,7 +831,7 @@ public class ExpressionBuilder implements NodeVisitor {
 	public boolean visitExit(NotBooleanOperator notBooleanOperator) {
 		try {
 			BoolExpr ex = null;
-			if (notBooleanOperator.numVarsInTree() == 0) {
+			if (notBooleanOperator.varsInTree().size() == 0) {
 				ex = ctx.mkBool(notBooleanOperator.evaluate().getValue());
 			} else {
 				ex = ctx.mkNot(findExpr(notBooleanOperator.getChildren().get(0)));

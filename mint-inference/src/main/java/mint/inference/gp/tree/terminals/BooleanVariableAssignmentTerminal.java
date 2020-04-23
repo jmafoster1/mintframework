@@ -1,8 +1,5 @@
 package mint.inference.gp.tree.terminals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
@@ -64,13 +61,6 @@ public class BooleanVariableAssignmentTerminal extends VariableTerminal<BooleanV
 			return ctx.mkBoolConst("latent" + this.getName());
 
 		return ctx.mkBoolConst(this.getName());
-	}
-
-	@Override
-	public Set<VariableTerminal<?>> varsInTree() {
-		Set<VariableTerminal<?>> v = new HashSet<VariableTerminal<?>>();
-		v.add(this.copy());
-		return v;
 	}
 
 	@Override

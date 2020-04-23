@@ -1,8 +1,5 @@
 package mint.inference.gp.tree.terminals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
@@ -74,13 +71,6 @@ public class DoubleVariableAssignmentTerminal extends VariableTerminal<DoubleVar
 			return ctx.mkRealConst("latent" + this.getName());
 
 		return ctx.mkRealConst(this.getName());
-	}
-
-	@Override
-	public Set<VariableTerminal<?>> varsInTree() {
-		Set<VariableTerminal<?>> v = new HashSet<VariableTerminal<?>>();
-		v.add(this.copy());
-		return v;
 	}
 
 	@Override

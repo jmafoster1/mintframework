@@ -1,5 +1,8 @@
 package mint.inference.gp.tree.terminals;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import mint.inference.evo.Chromosome;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.Terminal;
@@ -57,6 +60,14 @@ public abstract class VariableTerminal<T extends VariableAssignment<?>> extends 
 
 	public boolean isLatent() {
 		return LATENT;
+	}
+
+	@Override
+	public Set<VariableTerminal<?>> varsInTree() {
+		Set<VariableTerminal<?>> v = new HashSet<VariableTerminal<?>>();
+		if (!this.isConstant())
+			v.add((VariableTerminal<?>) this.copy());
+		return v;
 	}
 
 	public String typeString() {

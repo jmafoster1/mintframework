@@ -108,8 +108,6 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		return id;
 	}
 
-	public abstract int numVarsInTree();
-
 	public abstract int size();
 
 	protected void checkInterrupted() throws InterruptedException {
@@ -120,6 +118,10 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 	}
 
 	public abstract Set<VariableTerminal<?>> varsInTree();
+
+	public Set<VariableTerminal<?>> latentVars() {
+		return varsInTree().stream().filter(v -> v.isLatent()).collect(Collectors.toSet());
+	}
 
 	public abstract Expr toZ3(Context ctx);
 

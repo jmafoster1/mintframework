@@ -36,7 +36,7 @@ public class UpdateSRPlayground {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.DEBUG);
 
-		Generator gpGenerator = new Generator(new Random(20));
+		Generator gpGenerator = new Generator(new Random(21100));
 
 		List<NonTerminal<?>> intNonTerms = new ArrayList<NonTerminal<?>>();
 		intNonTerms.add(new AddIntegersOperator());
@@ -46,6 +46,7 @@ public class UpdateSRPlayground {
 
 		List<VariableTerminal<?>> intTerms = new ArrayList<VariableTerminal<?>>();
 		intTerms.add(new IntegerVariableAssignmentTerminal("r1", false));
+		intTerms.add(new IntegerVariableAssignmentTerminal("r2", true));
 		intTerms.add(new IntegerVariableAssignmentTerminal(0));
 		intTerms.add(new IntegerVariableAssignmentTerminal(1));
 		intTerms.add(new IntegerVariableAssignmentTerminal(2));
@@ -75,5 +76,8 @@ public class UpdateSRPlayground {
 		Node<?> best = (Node<?>) gp.evolve(20);
 		System.out.println(best + ": " + best.getFitness());
 		System.out.println("correct? " + gp.isCorrect(best));
+		System.out.println("varsInTree: " + best.varsInTree());
+		System.out.println("latentVars: " + best.latentVars());
+
 	}
 }

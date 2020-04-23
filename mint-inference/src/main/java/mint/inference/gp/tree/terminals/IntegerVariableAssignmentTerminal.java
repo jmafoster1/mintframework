@@ -1,8 +1,5 @@
 package mint.inference.gp.tree.terminals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
@@ -85,13 +82,6 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 			return ctx.mkIntConst("latent" + this.getName());
 
 		return ctx.mkIntConst(this.getName());
-	}
-
-	@Override
-	public Set<VariableTerminal<?>> varsInTree() {
-		Set<VariableTerminal<?>> v = new HashSet<VariableTerminal<?>>();
-		v.add(this.copy());
-		return v;
 	}
 
 	@Override

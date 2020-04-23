@@ -107,10 +107,9 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 					Collections.reverse(this.children);
 				break;
 			case 4:
-				// mutate by replacing the entire tree with a subtree
-				// System.out.println(" Subtree " + this + " ");
-				Node<?> subtree = this.getRandomNode(g);
-				newNode = swap(this, subtree);
+				// mutate by replacing a random node with a terminal
+				Node<?> node = this.getRandomNode(g);
+				newNode = swap(node, g.generateRandomTerminal(node.getReturnType()));
 				break;
 			case 5:
 				// fuzz a terminal
@@ -184,15 +183,6 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 
 	public Node<?> getChild(int x) {
 		return children.get(x);
-	}
-
-	@Override
-	public int numVarsInTree() {
-		int vars = 0;
-		for (Node<?> n : children) {
-			vars += n.numVarsInTree();
-		}
-		return vars;
 	}
 
 	@Override

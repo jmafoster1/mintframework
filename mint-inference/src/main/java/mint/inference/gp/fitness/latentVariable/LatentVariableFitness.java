@@ -47,54 +47,34 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		return distance(actual, current.getValue().getValue());
 	}
 
-	private double calculateDistance(Entry<List<VariableAssignment<?>>, VariableAssignment<?>> current,
+	private double calculateDistance(Entry<List<VariableAssignment<?>>, VariableAssignment<?>> target,
 			Set<VariableTerminal<?>> latent) throws InterruptedException {
 		individual.reset();
-		List<VariableAssignment<?>> ctx = makeCtx(current);
+		List<VariableAssignment<?>> ctx = makeCtx(target);
 		CallableNodeExecutor<T> executor = new CallableNodeExecutor<>(individual, ctx);
 		double minDistance = Double.POSITIVE_INFINITY;
-		T actual = null;
 
 		try {
 			if (latent.isEmpty()) {
-				actual = executor.call();
-				minDistance = distance(actual, current.getValue().getValue());
+				minDistance = distance(executor.call(), target.getValue().getValue());
 				individual.reset();
 			}
 
 			for (VariableTerminal<?> var : latent) {
-				minDistance = var.getTerminal().getValues().parallelStream().map(value -> {
-					try {
-						return getOffBy(var, (T) value, ctx, current);
-					} catch (InterruptedException | InvalidDistanceException e) {
-						return Double.POSITIVE_INFINITY;
-					}
-				}).min(Double::compare).get();
-//				T[] values = (T[]) var.getTerminal().getValues().toArray();
-//				for (T value : values) {
-//					var.setValue(value);
-//					ctx.add(var.getTerminal().copy());
-//					executor = new CallableNodeExecutor<>(individual, ctx);
-//					actual = executor.call();
-//					double offBy = distance(actual, current.getValue().getValue());
-////					System.out.println("value: " + value + " expected: " + current.getValue().getValue() + " actual: "
-////							+ actual + " distance: " + offBy);
-//					if (offBy < minDistance) {
-//						minDistance = offBy;
-//					}
-//				}
+				for (Object value : var.getTerminal().getValues()) {
+					double offBy = getOffBy(var, (T) value, ctx, target);
+					if (offBy < minDistance)
+						minDistance = offBy;
+				}
 			}
 		} catch (ClassCastException e) {
 			e.printStackTrace();
-//			System.exit(1);
 			return Double.POSITIVE_INFINITY;
 		} catch (InvalidDistanceException e) {
 			e.printStackTrace();
-//			System.exit(1);
 			return Double.POSITIVE_INFINITY;
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-//			System.exit(1);
 			return Double.POSITIVE_INFINITY;
 		}
 		return minDistance;
@@ -109,13 +89,10 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		double mistakes = 0D;
 		List<Double> distances = new ArrayList<Double>();
 
-		Set<VariableTerminal<?>> latent = latentVars(individual);
-
-//		System.out.println("Evaluating: " + individual + " Latent: " + latent);
+		Set<VariableTerminal<?>> latent = individual.latentVars();
 
 		Set<String> totalVars = totalUsedVars();
-		Set<String> totalUsedVars = individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet());
-		totalVars.removeAll(totalUsedVars);
+		totalVars.removeAll(individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet()));
 
 		for (Entry<List<VariableAssignment<?>>, VariableAssignment<?>> current : evalSet.entries()) {
 			double minDistance = calculateDistance(current, latent);
@@ -126,9 +103,6 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		}
 
 		double fitness = mistakes + rmsd(distances);
-
-		if (individual.numVarsInTree() == 0)
-			return fitness;
 
 		// If we've used all of the available inputs then don't penalise use of latent
 		// variables
@@ -158,22 +132,6 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		return ctx;
 	}
 
-	private Set<VariableTerminal<?>> latentVars(Node<VariableAssignment<T>> exp) {
-		Set<VariableTerminal<?>> varsInTree = new HashSet<VariableTerminal<?>>();
-		for (VariableTerminal<?> v1 : exp.varsInTree()) {
-			if (v1.isLatent())
-				varsInTree.add(v1);
-		}
-		return varsInTree;
-	}
-
-	protected Double calculateFitness(List<Double> distances) {
-		if (distances.isEmpty()) {
-			return Double.POSITIVE_INFINITY;
-		}
-		return rmsd(distances);
-	}
-
 	protected abstract double distance(T actual, Object expected) throws InvalidDistanceException;
 
 	@Override
@@ -183,7 +141,7 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		if (!(o instanceof LatentVariableFitness))
 			return false;
 
-		LatentVariableFitness singleOutputFitness = (LatentVariableFitness) o;
+		LatentVariableFitness<?> singleOutputFitness = (LatentVariableFitness<?>) o;
 
 		if (!individual.equals(singleOutputFitness.individual))
 			return false;
@@ -197,7 +155,7 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 	}
 
 	public boolean correct() throws InterruptedException {
-		Set<VariableTerminal<?>> undef = latentVars(individual);
+		Set<VariableTerminal<?>> undef = individual.latentVars();
 
 		for (Entry<List<VariableAssignment<?>>, VariableAssignment<?>> current : evalSet.entries()) {
 			double minDistance = calculateDistance(current, undef);
@@ -218,10 +176,6 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 		Set<String> totalUsedVars = individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet());
 		totalVars.removeAll(totalUsedVars);
 
-		return Arrays.asList(
-//				I can't remember why I put this in here.
-//				Maybe it was before I got the simplification properly working...
-//				(double) totalVars.size(), 
-				(double) individual.size());
+		return Arrays.asList((double) individual.size());
 	}
 }

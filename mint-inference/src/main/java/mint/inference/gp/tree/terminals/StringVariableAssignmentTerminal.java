@@ -1,8 +1,5 @@
 package mint.inference.gp.tree.terminals;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
@@ -66,13 +63,6 @@ public class StringVariableAssignmentTerminal extends VariableTerminal<StringVar
 		}
 
 		return ctx.mkConst(ctx.mkFuncDecl(this.getName(), new Sort[] {}, ctx.mkStringSort()));
-	}
-
-	@Override
-	public Set<VariableTerminal<?>> varsInTree() {
-		Set<VariableTerminal<?>> v = new HashSet<VariableTerminal<?>>();
-		v.add(this.copy());
-		return v;
 	}
 
 	@Override

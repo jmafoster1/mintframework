@@ -41,14 +41,6 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 		return constant;
 	}
 
-	@Override
-	public int numVarsInTree() {
-		if (isConstant())
-			return 0;
-		else
-			return 1;
-	}
-
 	protected abstract Terminal<V> getTermFromVals();
 
 	@Override
