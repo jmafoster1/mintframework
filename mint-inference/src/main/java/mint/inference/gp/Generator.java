@@ -12,7 +12,6 @@ import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.strings.AssignmentOperator;
 import mint.inference.gp.tree.terminals.VariableTerminal;
-import mint.tracedata.types.VariableAssignment;
 
 /**
  *
@@ -25,7 +24,9 @@ public class Generator {
 
 	protected Random rand;
 	protected List<NonTerminal<?>> functions;
-	protected List<VariableTerminal<?>> terminals;
+	protected List<VariableTerminal<?>> vars;
+	protected List<VariableTerminal<?>> consts;
+
 	protected AssignmentOperator aop;
 	protected int listLength = 0;
 	private final int TIMEOUT = 5;
@@ -37,7 +38,8 @@ public class Generator {
 	public Generator(Random r) {
 		rand = r;
 		functions = new ArrayList<NonTerminal<?>>();
-		terminals = new ArrayList<VariableTerminal<?>>();
+		vars = new ArrayList<VariableTerminal<?>>();
+		consts = new ArrayList<VariableTerminal<?>>();
 		aop = new AssignmentOperator();
 	}
 
@@ -58,19 +60,20 @@ public class Generator {
 	}
 
 	public void setTerminals(List<VariableTerminal<?>> terminals) {
-		this.terminals = terminals;
+		vars = terminals.stream().filter(x -> !x.isConstant()).collect(Collectors.toList());
+		consts = terminals.stream().filter(x -> x.isConstant()).collect(Collectors.toList());
 	}
 
 	public void addTerminals(List<VariableTerminal<?>> terminals) {
-		this.terminals.addAll(terminals);
+		vars.addAll(terminals.stream().filter(x -> !x.isConstant()).collect(Collectors.toList()));
+		consts.addAll(terminals.stream().filter(x -> x.isConstant()).collect(Collectors.toList()));
 	}
 
-	public void add(VariableTerminal<?> terminals) {
-		this.terminals.add(terminals);
-	}
-
-	public List<VariableTerminal<?>> getTerminals() {
-		return this.terminals;
+	public void add(VariableTerminal<?> terminal) {
+		if (terminal.isConstant())
+			consts.add(terminal);
+		else
+			vars.add(terminal);
 	}
 
 	public List<NonTerminal<?>> getNonTerminals() {
@@ -79,12 +82,11 @@ public class Generator {
 
 	public Node<?> generateRandomExpressionAux(int maxD, Datatype type) {
 		List<NonTerminal<?>> nonTerms = nonTerminals(type);
-		List<VariableTerminal<?>> terms = terminals(type);
 		if (nonTerms.isEmpty() || maxD < 2) {
-			return selectRandomTerminal(terms);
+			return generateRandomTerminal(type);
 		} else {
 			if (rand.nextDouble() > 0.7)
-				return selectRandomTerminal(terms);
+				return generateRandomTerminal(type);
 
 			NonTerminal<?> selected = nonTerms.get(rand.nextInt(nonTerms.size()));
 			return selected.createInstance(this, maxD - 1);
@@ -139,20 +141,12 @@ public class Generator {
 		return population;
 	}
 
-	public Node<? extends VariableAssignment<?>> selectRandomTerminal(List<VariableTerminal<?>> nodes) {
-		return nodes.get(rand.nextInt(nodes.size())).copy();
-	}
-
 	public List<NonTerminal<?>> nonTerminals(Datatype s) {
 		return this.functions.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
 	}
 
-	public List<VariableTerminal<?>> terminals(Datatype s) {
-		return this.terminals.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
-	}
-
-	public Node<?> generateRandomTerminal(Datatype type) {
-		return selectRandomTerminal(terminals(type));
+	public List<VariableTerminal<?>> terminals(List<VariableTerminal<?>> terminals, Datatype s) {
+		return terminals.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
 	}
 
 	public Node<?> generateRandomNonTerminal(Datatype[] typeSignature) {
@@ -182,5 +176,13 @@ public class Generator {
 			throw new IllegalStateException("No suitable nonterminials for type signature " + typeSignature);
 
 		return suitable.get(rand.nextInt(suitable.size())).newInstance();
+	}
+
+	public Node<?> generateRandomTerminal(Datatype type) {
+		List<VariableTerminal<?>> suitableVars = terminals(vars, type);
+		List<VariableTerminal<?>> suitableConsts = terminals(consts, type);
+		if (rand.nextBoolean() && !suitableVars.isEmpty())
+			return suitableVars.get(rand.nextInt(suitableVars.size())).copy();
+		return suitableConsts.get(rand.nextInt(suitableConsts.size())).copy();
 	}
 }

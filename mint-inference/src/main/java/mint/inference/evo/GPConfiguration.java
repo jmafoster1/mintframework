@@ -21,6 +21,16 @@ public class GPConfiguration {
 		this.tournamentSize = tournamentSize;
 	}
 
+	public GPConfiguration(int populationSize, double crossOver, double mutation, int depth) {
+		tournamentSize = 2;
+		if (tournamentSize > populationSize)
+			throw new IllegalArgumentException("Population size must be greater than tournament size");
+		this.populationSize = populationSize;
+		this.crossOver = crossOver;
+		this.mutation = mutation;
+		this.depth = depth;
+	}
+
 	public int getPopulationSize() {
 		return populationSize;
 	}

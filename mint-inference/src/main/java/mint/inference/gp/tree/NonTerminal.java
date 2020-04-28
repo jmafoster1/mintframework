@@ -127,14 +127,19 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 	}
 
 	private Node<?> mutateByRandomChangeOfFunction(Generator g) {
-		if (!g.nonTerminals(this.getReturnType()).isEmpty()) {
-			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(this, this.typeSignature());
+		List<Node<?>> mutationPoints = this.getAllNodesAsList().stream().filter(x -> x instanceof NonTerminal<?>)
+				.collect(Collectors.toList());
+		if (!g.nonTerminals(this.getReturnType()).isEmpty() && !mutationPoints.isEmpty()) {
+			NonTerminal<?> mutationPoint = (NonTerminal<?>) mutationPoints
+					.get(g.getRandom().nextInt(mutationPoints.size()));
+
+			NonTerminal<?> newFun = (NonTerminal<?>) g.generateRandomNonTerminal(mutationPoint,
+					mutationPoint.typeSignature());
 			if (newFun == null)
 				return this;
 			newFun.setChildren(this.children);
 			return newFun;
 		} else {
-			// System.out.println(" same");
 			return this;
 		}
 	}

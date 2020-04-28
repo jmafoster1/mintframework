@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.log4j.Logger;
@@ -95,7 +96,7 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 			// System.out.println(c.getClass());
 			throw new IllegalArgumentException(
 					"Could not calculate correctness for node of type " + ((Node<?>) c).getReturnType());
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -179,11 +180,12 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 		assert (lim > 0);
 		// System.out.println("Generating population");
 		population = generatePopulation(getGPConf().getPopulationSize() - seeds.size());
-		// System.out.println("Generated population");
+		System.out.println("Generated population");
 
 		population.addAll(seeds);
 
 		evaluatePopulation(population);
+		System.out.println(popInfo());
 
 		fittest = chooseBest(population);
 
@@ -192,6 +194,10 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 
 		AbstractIterator it = getIterator(population);
 		for (int i = 1; i <= lim; i++) {
+			ArrayList<Chromosome> optimal = (ArrayList<Chromosome>) population.stream()
+					.filter(in -> in.getFitness() == 0).collect(Collectors.toList());
+			if (optimal.size() > 0)
+				System.out.println(optimal);
 			if (fittest.getFitness() <= 0D)
 				return fittest;
 

@@ -68,13 +68,14 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 				}
 			}
 		} catch (ClassCastException e) {
-			e.printStackTrace();
 			return Double.POSITIVE_INFINITY;
 		} catch (InvalidDistanceException e) {
-			e.printStackTrace();
 			return Double.POSITIVE_INFINITY;
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			return Double.POSITIVE_INFINITY;
+		} catch (java.lang.IndexOutOfBoundsException e) {
+			System.out.println("OOB for " + individual);
+			System.exit(1);
 			return Double.POSITIVE_INFINITY;
 		}
 		return minDistance;
@@ -173,9 +174,8 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 	@Override
 	public List<Double> breakTies() {
 		Set<String> totalVars = totalUsedVars();
-		Set<String> totalUsedVars = individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet());
-		totalVars.removeAll(totalUsedVars);
+		totalVars.removeAll(individual.varsInTree().stream().map(s -> s.getName()).collect(Collectors.toSet()));
 
-		return Arrays.asList((double) individual.size());
+		return Arrays.asList((double) totalVars.size(), (double) individual.size());
 	}
 }

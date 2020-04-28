@@ -53,12 +53,7 @@ public class BooleanVariableAssignment extends VariableAssignment<Boolean> {
 
 	@Override
 	protected Boolean generateRandom() {
-		int bool = rand.nextInt(2);
-		if (bool == 1)
-			return true;
-		else
-			return false;
-
+		return rand.nextBoolean();
 	}
 
 	@Override

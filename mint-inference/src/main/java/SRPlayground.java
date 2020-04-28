@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import mint.inference.evo.GPConfiguration;
 import mint.inference.gp.Generator;
 import mint.inference.gp.LatentVariableGP;
-import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.nonterminals.integers.AddIntegersOperator;
 import mint.inference.gp.tree.nonterminals.integers.SubtractIntegersOperator;
@@ -67,7 +66,6 @@ public class SRPlayground {
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = generateTrainingSet();
 
 		System.out.println("Training set: " + trainingSet);
-		System.out.println("IntTerms: " + gpGenerator.terminals(Datatype.INTEGER));
 		System.out.println("Int values: " + IntegerVariableAssignment.values());
 
 		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet,

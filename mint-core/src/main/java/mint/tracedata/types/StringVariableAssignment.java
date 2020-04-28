@@ -100,9 +100,13 @@ public class StringVariableAssignment extends VariableAssignment<String> {
 				this.value += (char) (VariableAssignment.rand.nextInt(26) + 'a');
 			break;
 		case 1:
+			if (values.isEmpty())
+				break;
 			this.value += (char) (VariableAssignment.rand.nextInt(26) + 'a');
 			break;
 		case 2:
+			if (values.isEmpty())
+				break;
 			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
 			break;
 		}
