@@ -20,7 +20,6 @@ import mint.inference.gp.tree.NodeVisitor;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.booleans.AndBooleanOperator;
 import mint.inference.gp.tree.nonterminals.booleans.EQBooleanOperator;
-import mint.inference.gp.tree.nonterminals.booleans.EQStringOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanIntegersOperator;
 import mint.inference.gp.tree.nonterminals.booleans.LTBooleanDoublesOperator;
@@ -665,16 +664,6 @@ public class ExpressionBuilder implements NodeVisitor {
 		} catch (Z3Exception e) {
 			e.printStackTrace();
 		}
-		return true;
-	}
-
-	@Override
-	public boolean visitEnter(EQStringOperator eqStringOperator) {
-		return true;
-	}
-
-	@Override
-	public boolean visitExit(EQStringOperator eqStringOperator) {
 		return true;
 	}
 

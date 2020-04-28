@@ -178,9 +178,9 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		return max;
 	}
 
-	protected Node<?> mutateByGrowth(Generator g) {
-		Node<?> mutationPoint = this.getRandomNode(g);
-		Node<?> newTree = g.generateRandomExpression(this.depth(), mutationPoint.getReturnType());
+	protected Node<?> mutateByGrowth(Node<?> node, Generator g) {
+		Node<?> mutationPoint = node.getRandomNode(g);
+		Node<?> newTree = g.generateRandomExpression(node.depth(), mutationPoint.getReturnType());
 
 		return swap(mutationPoint, newTree);
 	}

@@ -3,32 +3,23 @@ package mint.inference.gp.tree.nonterminals.booleans;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 
-import mint.inference.gp.Generator;
-import mint.inference.gp.tree.Datatype;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NodeVisitor;
-import mint.inference.gp.tree.NonTerminal;
 import mint.tracedata.types.BooleanVariableAssignment;
 
 /**
  * Created by neilwalkinshaw on 26/05/15.
  */
-public class EQBooleanOperator extends BooleanNonTerminal {
+public abstract class EQBooleanOperator extends BooleanNonTerminal {
 
 	public EQBooleanOperator(Node<?> a, Node<?> b) {
-		super(null);
+		super();
 		addChild(a);
 		addChild(b);
 	}
 
 	public EQBooleanOperator() {
-
-	}
-
-	@Override
-	public NonTerminal<BooleanVariableAssignment> createInstance(Generator g, int depth) {
-		return new EQBooleanOperator(g.generateRandomExpression(depth, Datatype.BOOLEAN),
-				g.generateRandomExpression(depth, Datatype.BOOLEAN));
+		super();
 	}
 
 	@Override
@@ -62,15 +53,5 @@ public class EQBooleanOperator extends BooleanNonTerminal {
 	@Override
 	public Expr toZ3(Context ctx) {
 		return ctx.mkEq(getChild(0).toZ3(ctx), getChild(1).toZ3(ctx));
-	}
-
-	@Override
-	public NonTerminal<BooleanVariableAssignment> newInstance() {
-		return new EQBooleanOperator();
-	}
-
-	@Override
-	public Datatype[] typeSignature() {
-		return new Datatype[] { Datatype.ANY, Datatype.ANY, Datatype.BOOLEAN };
 	}
 }

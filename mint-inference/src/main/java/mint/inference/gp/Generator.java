@@ -1,7 +1,6 @@
 package mint.inference.gp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -88,8 +87,11 @@ public class Generator {
 			if (rand.nextDouble() > 0.7)
 				return generateRandomTerminal(type);
 
-			NonTerminal<?> selected = nonTerms.get(rand.nextInt(nonTerms.size()));
-			return selected.createInstance(this, maxD - 1);
+			NonTerminal<?> selected = generateRandomNonTerminal(type);
+
+			Node<?> s = selected.createInstance(this, maxD - 1);
+
+			return s;
 		}
 	}
 
@@ -131,7 +133,6 @@ public class Generator {
 				int iteration = 0;
 				while ((populationContains(population, instance) || populationContains(existing, instance))
 						&& iteration < TIMEOUT) {
-					// System.out.println("individual: " + instance);
 					iteration++;
 					instance = generateRandomExpression(maxD + 1, type);
 				}
@@ -145,18 +146,8 @@ public class Generator {
 		return this.functions.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
 	}
 
-	public List<VariableTerminal<?>> terminals(List<VariableTerminal<?>> terminals, Datatype s) {
-		return terminals.stream().filter(x -> x.getReturnType() == s).collect(Collectors.toList());
-	}
-
-	public Node<?> generateRandomNonTerminal(Datatype[] typeSignature) {
-		List<NonTerminal<?>> suitable = functions.stream()
-				.filter(f -> Datatype.typeChecks(f.typeSignature(), typeSignature)).collect(Collectors.toList());
-		if (suitable.isEmpty())
-			throw new IllegalStateException(
-					"No suitable nonterminials for type signature " + Arrays.toString(typeSignature));
-
-		return suitable.get(rand.nextInt(suitable.size())).newInstance();
+	public List<VariableTerminal<?>> terminals(List<VariableTerminal<?>> terminals, Datatype type) {
+		return terminals.stream().filter(x -> x.getReturnType() == type).collect(Collectors.toList());
 	}
 
 	public Node<?> generateRandomNonTerminal(NonTerminal<?> avoid, Datatype[] typeSignature) {
@@ -169,20 +160,22 @@ public class Generator {
 		return suitable.get(rand.nextInt(suitable.size())).newInstance();
 	}
 
-	public Node<?> generateRandomNonTerminal(Datatype typeSignature) {
-		List<NonTerminal<?>> suitable = functions.stream().filter(f -> f.getReturnType() == typeSignature)
-				.collect(Collectors.toList());
+	public NonTerminal<?> generateRandomNonTerminal(Datatype type) {
+		List<NonTerminal<?>> suitable = nonTerminals(type);
 		if (suitable.isEmpty())
-			throw new IllegalStateException("No suitable nonterminials for type signature " + typeSignature);
+			throw new IllegalStateException("No suitable nonterminials for type signature " + type);
 
 		return suitable.get(rand.nextInt(suitable.size())).newInstance();
 	}
 
-	public Node<?> generateRandomTerminal(Datatype type) {
+	public VariableTerminal<?> generateRandomTerminal(Datatype type) {
 		List<VariableTerminal<?>> suitableVars = terminals(vars, type);
 		List<VariableTerminal<?>> suitableConsts = terminals(consts, type);
+		VariableTerminal<?> term;
 		if (rand.nextBoolean() && !suitableVars.isEmpty())
-			return suitableVars.get(rand.nextInt(suitableVars.size())).copy();
-		return suitableConsts.get(rand.nextInt(suitableConsts.size())).copy();
+			term = suitableVars.get(rand.nextInt(suitableVars.size()));
+		else
+			term = suitableConsts.get(rand.nextInt(suitableConsts.size()));
+		return term;
 	}
 }

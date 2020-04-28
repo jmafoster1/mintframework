@@ -3,7 +3,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import mint.inference.gp.tree.nonterminals.booleans.BooleanNonTerminal;
-import mint.inference.gp.tree.nonterminals.booleans.EQBooleanOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQDoublesOperator;
 import mint.inference.gp.tree.nonterminals.doubles.IfThenElseOperator;
 import mint.inference.gp.tree.nonterminals.doubles.SubtractDoublesOperator;
 import mint.inference.gp.tree.terminals.DoubleVariableAssignmentTerminal;
@@ -26,7 +26,7 @@ public class TestStackOverflow {
 		DoubleVariableAssignmentTerminal incvar = new DoubleVariableAssignmentTerminal(one, false, false);
 
 		SubtractDoublesOperator sub = new SubtractDoublesOperator(incvar, incvar);
-		BooleanNonTerminal intvar = new EQBooleanOperator(addvar, sub);
+		BooleanNonTerminal intvar = new EQDoublesOperator(addvar, sub);
 
 		IfThenElseOperator ro = new IfThenElseOperator(intvar, varvar, incvar);
 		VariableAssignment<?> result = ro.evaluate();

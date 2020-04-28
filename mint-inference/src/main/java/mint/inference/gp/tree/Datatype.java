@@ -45,12 +45,6 @@ public enum Datatype implements TypeCheck {
 			}
 			return false;
 		}
-	},
-	ANY {
-		@Override
-		public boolean matches(TypeCheck c) {
-			return true;
-		}
 	};
 
 	public static boolean typeChecks(Datatype[] t1, Datatype[] t2) {

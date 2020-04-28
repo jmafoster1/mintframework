@@ -3,9 +3,11 @@ package mint.inference.gp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.HashSetValuedHashMap;
 
 import mint.Configuration;
 import mint.inference.evo.AbstractIterator;
@@ -54,6 +56,15 @@ public class SingleOutputGP extends GP<VariableAssignment<?>> {
 		this.evals = evals;
 		this.gen = gen;
 		this.mem_dist = memoriseDistances;
+		distances = new HashMap<Node<?>, List<Double>>();
+	}
+
+	@Deprecated
+	public SingleOutputGP(Generator gen, Map<List<VariableAssignment<?>>, VariableAssignment<?>> evals,
+			GPConfiguration gpConfiguration, boolean b) {
+		super(gpConfiguration);
+		this.evals = new HashSetValuedHashMap<List<VariableAssignment<?>>, VariableAssignment<?>>(evals);
+		this.gen = gen;
 		distances = new HashMap<Node<?>, List<Double>>();
 	}
 

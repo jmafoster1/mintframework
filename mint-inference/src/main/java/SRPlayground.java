@@ -60,7 +60,13 @@ public class SRPlayground {
 		gpGenerator.add(new IntegerVariableAssignmentTerminal("i0", false));
 		gpGenerator.add(new IntegerVariableAssignmentTerminal("r1", true));
 
-		for (int i : new int[] { 0, 1, 50, 10, 20, 100, 30, 70 })
+		for (int i : new int[] { 0, 1, 2, 960, 1060, 720, 1070, 1220, 950, 870, 890, 60, 790, 730, 770, 920, 970, 990,
+				1090, 1190, 590, 660, 90, 430, 40, 750, 850, 1240, 1260, 1310, 1360, 1410, 1460, 280, 330, 450, 980,
+				1100, 1120, 1170, 1270, 300, 780, 830, 810, 880, 900, 1000, 1020, 70, 290, 510, 610, 130, 80, 230, 250,
+				350, 650, 680, 800, 820, 270, 640, 740, 840, 940, 1040, 1140, 1160, 1210, 1230, 1250, 1300, 1400, 1420,
+				1470, 1490, 440, 380, 400, 620, 180, 310, 220, 320, 370, 420, 470, 520, 570, 670, 690, 710, 760, 860,
+				910, 930, 1030, 1010, 1080, 120, 140, 240, 340, 490, 540, 560, 580, 630, 500, 600, 700, 100, 200, 50,
+				150, 20, 170, 190, 110, 210, 160, 260, 360, 410, 390, 460, 480, 530, 550 })
 			gpGenerator.add(new IntegerVariableAssignmentTerminal(i));
 
 		MultiValuedMap<List<VariableAssignment<?>>, VariableAssignment<?>> trainingSet = generateTrainingSet();
@@ -84,14 +90,7 @@ public class SRPlayground {
 	}
 
 	public static void main(String[] args) {
-//		run(1575902062141l);
-		long seed = System.currentTimeMillis();
-		boolean stop = false;
-		while (!stop) {
-			System.out.println("Seed: " + seed);
-			stop = !run(seed);
-			seed = System.currentTimeMillis();
-		}
+		run(5);
 
 	}
 }

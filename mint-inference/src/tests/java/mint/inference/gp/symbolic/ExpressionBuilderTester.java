@@ -9,7 +9,8 @@ import com.microsoft.z3.Expr;
 import mint.inference.gp.tree.Node;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.booleans.BooleanNonTerminal;
-import mint.inference.gp.tree.nonterminals.booleans.EQBooleanOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQDoublesOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQIntegersOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.LTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.doubles.AddDoublesOperator;
@@ -33,7 +34,7 @@ public class ExpressionBuilderTester {
 	 */
 	@Test
 	public void testWikipediaSymbexExample() {
-		NonTerminal nt = new EQBooleanOperator(new MultiplyDoublesOperator(getConst(2D), getVar("y")), getConst(12D));
+		NonTerminal nt = new EQIntegersOperator(new MultiplyDoublesOperator(getConst(2D), getVar("y")), getConst(12D));
 		NonTerminal ifN = new IfThenElseOperator(nt, getConst(5D), getConst(6D));
 		ExpressionBuilder eb = new ExpressionBuilder(ifN, new Context());
 		for (Expr e : eb.getTargets()) {
@@ -51,7 +52,7 @@ public class ExpressionBuilderTester {
 		DoubleVariableAssignmentTerminal j = new DoubleVariableAssignmentTerminal(add, false, false);
 		DoubleVariableAssignmentTerminal oneV = new DoubleVariableAssignmentTerminal(one, true, false);
 
-		BooleanNonTerminal intvar = new EQBooleanOperator(j, varvar);
+		BooleanNonTerminal intvar = new EQDoublesOperator(j, varvar);
 
 		NonTerminal<DoubleVariableAssignment> adder = new AddDoublesOperator(j, oneV);
 

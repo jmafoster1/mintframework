@@ -17,7 +17,7 @@ import mint.inference.evo.GPConfiguration;
 import mint.inference.gp.tree.NonTerminal;
 import mint.inference.gp.tree.nonterminals.booleans.AndBooleanOperator;
 import mint.inference.gp.tree.nonterminals.booleans.BooleanNonTerminal;
-import mint.inference.gp.tree.nonterminals.booleans.EQBooleanOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.LTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.OrBooleanOperator;
@@ -80,7 +80,6 @@ public class GPTester {
 		boolNonTerms.add(new OrBooleanOperator());
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
-		boolNonTerms.add(new EQBooleanOperator());
 		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
@@ -139,7 +138,6 @@ public class GPTester {
 		boolNonTerms.add(new OrBooleanOperator());
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
-		boolNonTerms.add(new EQBooleanOperator());
 		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
@@ -187,7 +185,6 @@ public class GPTester {
 		boolNonTerms.add(new OrBooleanOperator());
 		boolNonTerms.add(new LTBooleanDoublesOperator());
 		boolNonTerms.add(new GTBooleanDoublesOperator());
-		boolNonTerms.add(new EQBooleanOperator());
 		gpGenerator.addFunctions(boolNonTerms);
 
 		List<VariableTerminal<?>> boolTerms = new ArrayList<VariableTerminal<?>>();
@@ -247,7 +244,7 @@ public class GPTester {
 		DoubleVariableAssignmentTerminal addvar = new DoubleVariableAssignmentTerminal(add, true, false);
 		DoubleVariableAssignmentTerminal incvar = new DoubleVariableAssignmentTerminal(one, false, false);
 
-		BooleanNonTerminal intvar = new EQBooleanOperator(addvar, new SubtractDoublesOperator(incvar, incvar));
+		BooleanNonTerminal intvar = new EQDoublesOperator(addvar, new SubtractDoublesOperator(incvar, incvar));
 
 		IfThenElseOperator ro = new IfThenElseOperator(intvar, varvar, incvar);
 		VariableAssignment<?> result = ro.evaluate();

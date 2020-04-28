@@ -57,9 +57,9 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 
 	@Override
 	public Node<?> mutate(Generator g, int depth) {
-		if (this.isConstant()) {
+		if (this.isConstant() && g.getRandom().nextBoolean()) {
 			terminal.fuzz();
 		}
-		return this;
+		return mutateByGrowth(this, g);
 	}
 }
