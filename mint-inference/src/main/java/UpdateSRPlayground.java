@@ -70,6 +70,11 @@ public class UpdateSRPlayground {
 
 		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(100, 0.9f, 1f, 3, 1));
 
+		NonTerminal<?> add = new AddIntegersOperator();
+		add.addChild(new IntegerVariableAssignmentTerminal(100));
+		add.addChild(new IntegerVariableAssignmentTerminal("r1", false));
+		gp.addSeed(add);
+
 //		IntegerVariableAssignmentTerminal seed = new IntegerVariableAssignmentTerminal(50);
 //		gp.addSeed(seed);
 
