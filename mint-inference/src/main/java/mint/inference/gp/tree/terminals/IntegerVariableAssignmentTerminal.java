@@ -22,6 +22,9 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 		if (var.getValue() != null)
 			origVal = var.getValue();
 		this.terminal = (IntegerVariableAssignment) var;
+		if (constant && !var.getName().equals(var.getValue().toString())) {
+			throw new IllegalStateException("GOT YOU! " + var.getName() + "=" + var.getValue());
+		}
 	}
 
 	// For initialising constants
@@ -36,6 +39,10 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 		super(false, latent);
 		IntegerVariableAssignment var = new IntegerVariableAssignment(name);
 		this.terminal = var;
+		if (constant && var.getName() != var.getValue().toString()) {
+			System.out.println("GOT YOU! " + var.getName() + "=" + var.getValue());
+			System.exit(1);
+		}
 	}
 
 	@Override
@@ -63,14 +70,6 @@ public class IntegerVariableAssignmentTerminal extends VariableTerminal<IntegerV
 	public boolean accept(NodeVisitor visitor) {
 		visitor.visitEnter(this);
 		return visitor.visitExit(this);
-	}
-
-	@Override
-	public void reset() {
-		super.reset();
-		if (!isConstant()) {
-			terminal.setValue(0l);
-		}
 	}
 
 	@Override

@@ -147,6 +147,7 @@ public class DoubleVariableAssignment extends NumberVariableAssignment<Double> {
 		} else {
 			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
 		}
+		this.name = value.toString();
 	}
 
 	public static void clearValues() {

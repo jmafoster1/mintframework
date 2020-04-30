@@ -185,6 +185,8 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Long> {
 
 	@Override
 	public void fuzz() {
+		if (value == null)
+			return;
 		switch (VariableAssignment.rand.nextInt(3)) {
 		case 0:
 			this.value++;
@@ -196,6 +198,7 @@ public class IntegerVariableAssignment extends NumberVariableAssignment<Long> {
 			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
 			break;
 		}
+		this.name = value.toString();
 	}
 
 	public static void clearValues() {

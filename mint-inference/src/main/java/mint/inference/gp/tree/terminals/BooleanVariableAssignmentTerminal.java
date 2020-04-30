@@ -33,14 +33,6 @@ public class BooleanVariableAssignmentTerminal extends VariableTerminal<BooleanV
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
-		if (!isConstant()) {
-			terminal.setValue(false);
-		}
-	}
-
-	@Override
 	public void setValue(Object val) {
 		terminal.setValue((Boolean) val);
 	}

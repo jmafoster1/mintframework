@@ -13,7 +13,7 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 
 	protected V terminal;
 
-	protected boolean constant;
+	protected final boolean constant;
 
 	public Terminal(boolean constant) {
 		this.constant = constant;
@@ -33,7 +33,6 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 
 	@Override
 	public List<Node<?>> getChildren() {
-
 		return new ArrayList<Node<?>>();
 	}
 
@@ -57,7 +56,7 @@ public abstract class Terminal<V extends VariableAssignment<?>> extends Node<V> 
 
 	@Override
 	public Node<?> mutate(Generator g, int depth) {
-		if (this.isConstant() && g.getRandom().nextBoolean()) {
+		if (this.isConstant()) {
 			terminal.fuzz();
 		}
 		return mutateByGrowth(this, g);

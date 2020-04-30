@@ -31,12 +31,14 @@ public abstract class VariableTerminal<T extends VariableAssignment<?>> extends 
 		return terminal.getName();
 	}
 
+	public Object value() {
+		return terminal.getValue();
+	}
+
 	@Override
 	public void reset() {
-		super.reset();
 		if (!isConstant()) {
 			terminal.setValue(null);
-			terminal.setNull(true);
 		}
 	}
 

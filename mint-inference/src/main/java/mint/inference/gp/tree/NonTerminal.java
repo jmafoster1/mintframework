@@ -31,6 +31,13 @@ public abstract class NonTerminal<T extends VariableAssignment<?>> extends Node<
 		this.children = new ArrayList<Node<?>>();
 	}
 
+	@Override
+	public void reset() {
+		for (Node<?> child : getChildren()) {
+			child.reset();
+		}
+	}
+
 	protected void visitChildren(NodeVisitor visitor) throws InterruptedException {
 		Stack<Node<?>> childrenStack = new Stack<Node<?>>();
 		for (Node<?> child : this.children) {

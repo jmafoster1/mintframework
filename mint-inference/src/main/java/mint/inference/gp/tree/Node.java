@@ -46,11 +46,7 @@ public abstract class Node<T extends VariableAssignment<?>> implements Chromosom
 		this.def = def;
 	}
 
-	public void reset() {
-		for (Node<?> child : getChildren()) {
-			child.reset();
-		}
-	}
+	public abstract void reset();
 
 	public abstract boolean accept(NodeVisitor visitor) throws InterruptedException;
 

@@ -55,14 +55,6 @@ public class DoubleVariableAssignmentTerminal extends VariableTerminal<DoubleVar
 	}
 
 	@Override
-	public void reset() {
-		super.reset();
-		if (!isConstant()) {
-			terminal.setValue(origVal);
-		}
-	}
-
-	@Override
 	public Expr toZ3(Context ctx) {
 		if (this.isConstant()) {
 			return ctx.mkReal(this.getTerminal().getValue().longValue());

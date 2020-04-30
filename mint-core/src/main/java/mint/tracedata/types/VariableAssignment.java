@@ -196,10 +196,9 @@ public abstract class VariableAssignment<T> {
 				setStringValue(s);
 				setNull(false);
 			}
-		} else if (value != null) {
-			setToValue(value);
-
 		}
+		setToValue(value);
+		setNull(value == null);
 	}
 
 	protected void setToValue(T value) {

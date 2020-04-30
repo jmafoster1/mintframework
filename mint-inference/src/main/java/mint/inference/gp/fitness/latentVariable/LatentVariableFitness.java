@@ -50,6 +50,7 @@ public abstract class LatentVariableFitness<T> extends Fitness {
 	private double calculateDistance(Entry<List<VariableAssignment<?>>, VariableAssignment<?>> target,
 			Set<VariableTerminal<?>> latent) throws InterruptedException {
 		individual.reset();
+
 		List<VariableAssignment<?>> ctx = makeCtx(target);
 		CallableNodeExecutor<T> executor = new CallableNodeExecutor<>(individual, ctx);
 		double minDistance = Double.POSITIVE_INFINITY;

@@ -110,6 +110,7 @@ public class StringVariableAssignment extends VariableAssignment<String> {
 			this.value = values.get(VariableAssignment.rand.nextInt(values.size()));
 			break;
 		}
+		this.name = value.toString();
 	}
 
 	public static void clearValues() {
