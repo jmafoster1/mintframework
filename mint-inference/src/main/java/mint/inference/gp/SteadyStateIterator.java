@@ -26,9 +26,9 @@ public class SteadyStateIterator extends AbstractIterator {
 
 	private final static Logger LOGGER = Logger.getLogger(SteadyStateIterator.class.getName());
 
-	public SteadyStateIterator(List<Chromosome> elite, List<Chromosome> population, double crossOver, double mutation,
+	public SteadyStateIterator(List<Chromosome> elite, List<Chromosome> population, int mu, double mutation,
 			Generator g, int maxD, Random r) {
-		super(elite, population, crossOver, mutation, r);
+		super(elite, population, mu, mutation, r);
 		this.gen = g;
 		this.maxDepth = maxD;
 	}
@@ -143,9 +143,8 @@ public class SteadyStateIterator extends AbstractIterator {
 		List<Chromosome> newPopulation = new ArrayList<Chromosome>(population);
 		sel = gp.getSelection(population);
 
-		int numberCrossover = (int) ((population.size() - elite.size()) * crossOver);
 		int numberMutation = (int) ((population.size() - elite.size()) * mutation);
-		for (int crossOvers = 0; crossOvers < numberCrossover; crossOvers++) {
+		for (int crossOvers = 0; crossOvers < mu; crossOvers++) {
 			List<Chromosome> parents = sel.select(gp.getGPConf(), 2);
 			newPopulation.add(crossOver(parents.get(0), parents.get(1)));
 		}

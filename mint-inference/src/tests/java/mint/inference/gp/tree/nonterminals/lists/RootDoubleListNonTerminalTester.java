@@ -90,7 +90,7 @@ public class RootDoubleListNonTerminalTester {
 		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateTrainingSet(50),
-				new GPConfiguration(100, 0.95, 0.05, 8, 7), false);
+				new GPConfiguration(100, 100, 0.05, 8, 7), false);
 
 		System.out.println(gp.evolve(30));
 

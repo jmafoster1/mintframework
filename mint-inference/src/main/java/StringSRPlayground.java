@@ -40,7 +40,7 @@ public class StringSRPlayground {
 
 		System.out.println(trainingSet);
 
-		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(5, 0.9f, 0.01f, 7, 2));
+		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(5, 2, 0.01f, 7, 2));
 
 		Node<?> best = (Node<?>) gp.evolve(1);
 

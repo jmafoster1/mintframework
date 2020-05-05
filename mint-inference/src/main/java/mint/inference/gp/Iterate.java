@@ -27,7 +27,7 @@ public class Iterate extends AbstractIterator {
 
 	private final static Logger LOGGER = Logger.getLogger(Iterate.class.getName());
 
-	public Iterate(List<Chromosome> elite, List<Chromosome> population, double crossOver, double mutation, Generator g,
+	public Iterate(List<Chromosome> elite, List<Chromosome> population, int crossOver, double mutation, Generator g,
 			int maxD, Random r) {
 		super(elite, population, crossOver, mutation, r);
 		this.gen = g;

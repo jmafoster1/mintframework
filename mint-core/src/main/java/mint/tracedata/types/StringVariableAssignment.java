@@ -92,6 +92,9 @@ public class StringVariableAssignment extends VariableAssignment<String> {
 	// Either chop the first letter off or add a letter onto the end or replace with
 	// a new value from the set of values
 	public void fuzz() {
+		if (value == null) {
+			value = "";
+		}
 		switch (VariableAssignment.rand.nextInt(3)) {
 		case 0:
 			if (this.value.length() > 0)

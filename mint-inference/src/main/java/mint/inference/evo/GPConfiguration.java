@@ -6,41 +6,33 @@ package mint.inference.evo;
 public class GPConfiguration {
 
 	private final int populationSize;
-	private final double crossOver;
-	private final double mutation;
+	public final int mu;
+	public final double mutation;
 	private final int depth;
 	private final int tournamentSize;
 
-	public GPConfiguration(int populationSize, double crossOver, double mutation, int depth, int tournamentSize) {
+	public GPConfiguration(int populationSize, int mu, double mutation, int depth, int tournamentSize) {
 		if (tournamentSize > populationSize)
 			throw new IllegalArgumentException("Population size must be greater than tournament size");
 		this.populationSize = populationSize;
-		this.crossOver = crossOver;
+		this.mu = mu;
 		this.mutation = mutation;
 		this.depth = depth;
 		this.tournamentSize = tournamentSize;
 	}
 
-	public GPConfiguration(int populationSize, double crossOver, double mutation, int depth) {
+	public GPConfiguration(int populationSize, int mu, double mutation, int depth) {
 		tournamentSize = 2;
 		if (tournamentSize > populationSize)
 			throw new IllegalArgumentException("Population size must be greater than tournament size");
 		this.populationSize = populationSize;
-		this.crossOver = crossOver;
+		this.mu = mu;
 		this.mutation = mutation;
 		this.depth = depth;
 	}
 
 	public int getPopulationSize() {
 		return populationSize;
-	}
-
-	public double getCrossOver() {
-		return crossOver;
-	}
-
-	public double getMutation() {
-		return mutation;
 	}
 
 	public int getDepth() {

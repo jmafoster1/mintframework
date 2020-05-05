@@ -101,7 +101,7 @@ public class GuardSRPlayground {
 
 		System.out.println(trainingSet.keys().stream().anyMatch(x -> trainingSet.get(x).size() > 1));
 
-		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(5, 0.9f, 1f, 2));
+		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(5, 2, 1f, 2));
 
 		Node<?> best = (Node<?>) gp.evolve(100);
 		System.out.println(best + ":" + best.getFitness());

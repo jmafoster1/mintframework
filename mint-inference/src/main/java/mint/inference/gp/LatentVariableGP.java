@@ -74,11 +74,11 @@ public class LatentVariableGP extends GP<VariableAssignment<?>> {
 	protected AbstractIterator getIterator(List<Chromosome> population) {
 		if (selection != null) {
 			List<Chromosome> elites = selection.getElite();
-			return new SteadyStateIterator(elites, population, getGPConf().getCrossOver(), getGPConf().getMutation(),
-					gen, getGPConf().getDepth(), new Random(Configuration.getInstance().SEED));
+			return new SteadyStateIterator(elites, population, getGPConf().mu, getGPConf().mutation, gen,
+					getGPConf().getDepth(), new Random(Configuration.getInstance().SEED));
 		}
-		return new SteadyStateIterator(new ArrayList<Chromosome>(), population, getGPConf().getCrossOver(),
-				getGPConf().getMutation(), gen, getGPConf().getDepth(), new Random(Configuration.getInstance().SEED));
+		return new SteadyStateIterator(new ArrayList<Chromosome>(), population, getGPConf().mu,
+				getGPConf().mutation, gen, getGPConf().getDepth(), new Random(Configuration.getInstance().SEED));
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public class GPTester {
 		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateTrainingSet(60),
-				new GPConfiguration(60, 0.7, 1, 5, 7), false);
+				new GPConfiguration(60, 50, 1, 5, 7), false);
 
 		System.out.println(gp.evolve(100));
 
@@ -150,7 +150,7 @@ public class GPTester {
 		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateTrainingSet(100),
-				new GPConfiguration(200, 0.9, 0.1, 5, 20), false);
+				new GPConfiguration(200, 100, 0.1, 5, 20), false);
 
 		System.out.println(gp.evolve(400));
 
@@ -197,7 +197,7 @@ public class GPTester {
 		gpGenerator.addTerminals(boolTerms);
 
 		SingleOutputGP gp = new SingleOutputGP(gpGenerator, generateBooleanTrainingSet(50),
-				new GPConfiguration(100, 0.95, 0.05, 7, 10), false);
+				new GPConfiguration(100, 100, 0.05, 7, 10), false);
 
 		System.out.println(gp.evolve(20));
 

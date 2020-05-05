@@ -68,7 +68,7 @@ public class UpdateSRPlayground {
 		System.out.println("IntTerms: " + intTerms);
 		System.out.println("Int values: " + IntegerVariableAssignment.values());
 
-		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(100, 0.9f, 1f, 3, 1));
+		LatentVariableGP gp = new LatentVariableGP(gpGenerator, trainingSet, new GPConfiguration(100, 2, 1f, 3, 1));
 
 		NonTerminal<?> add = new AddIntegersOperator();
 		add.addChild(new IntegerVariableAssignmentTerminal(100));

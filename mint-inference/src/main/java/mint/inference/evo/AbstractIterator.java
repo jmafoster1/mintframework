@@ -17,15 +17,16 @@ public abstract class AbstractIterator {
 	protected List<Chromosome> population;
 	protected List<Chromosome> elite;
 	protected Random rand;
-	protected double crossOver, mutation;
+	public int mu;
+	public double mutation;
 	protected Selection sel;
 
-	public AbstractIterator(List<Chromosome> elites, List<Chromosome> population, double crossOver, double mutation,
+	public AbstractIterator(List<Chromosome> elites, List<Chromosome> population, int crossOver, double mutation,
 			Random r) {
 		rand = r;
 		this.population = population;
 		this.mutation = mutation;
-		this.crossOver = crossOver;
+		this.mu = crossOver;
 		this.elite = new ArrayList<Chromosome>();
 		this.elite.addAll(elites);
 	}
@@ -36,7 +37,7 @@ public abstract class AbstractIterator {
 		for (Chromosome el : elite) {
 			newPopulation.add(el.copy());
 		}
-		int numberCrossover = (int) ((population.size() - elite.size()) * crossOver);
+		int numberCrossover = (population.size() - elite.size()) * mu;
 		int numberMutation = (int) ((population.size() - elite.size()) * mutation);
 		for (int crossOvers = 0; crossOvers < numberCrossover; crossOvers++) {
 			sel = gp.getSelection(population);
