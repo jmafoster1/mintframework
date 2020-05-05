@@ -143,13 +143,12 @@ public class SteadyStateIterator extends AbstractIterator {
 		List<Chromosome> newPopulation = new ArrayList<Chromosome>(population);
 		sel = gp.getSelection(population);
 
-		int numberMutation = (int) ((population.size() - elite.size()) * mutation);
-		for (int crossOvers = 0; crossOvers < mu; crossOvers++) {
+		for (int c = 0; c < mu; c++) {
 			List<Chromosome> parents = sel.select(gp.getGPConf(), 2);
-			newPopulation.add(crossOver(parents.get(0), parents.get(1)));
-		}
-		for (int mutations = 0; mutations < numberMutation; mutations++) {
-			newPopulation.add(mutate(population.get(rand.nextInt(population.size()))));
+			Chromosome child = crossOver(parents.get(0), parents.get(1));
+			if (rand.nextDouble() > mutation)
+				child = mutate(child);
+			population.add(child);
 		}
 
 		// System.out.println("Simplifying new population");
