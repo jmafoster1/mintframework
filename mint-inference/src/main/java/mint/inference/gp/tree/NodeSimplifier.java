@@ -9,6 +9,8 @@ import com.microsoft.z3.RealExpr;
 import com.microsoft.z3.SeqExpr;
 
 import mint.inference.gp.tree.nonterminals.booleans.AndBooleanOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQIntegersOperator;
+import mint.inference.gp.tree.nonterminals.booleans.EQStringsOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanDoublesOperator;
 import mint.inference.gp.tree.nonterminals.booleans.GTBooleanIntegersOperator;
 import mint.inference.gp.tree.nonterminals.booleans.LTBooleanDoublesOperator;
@@ -64,7 +66,7 @@ public class NodeSimplifier {
 			IntegerVariableAssignment num = new IntegerVariableAssignment(exp.toString().replace("latent", ""));
 			return new IntegerVariableAssignmentTerminal(num, false, exp.toString().startsWith("latent"));
 		}
-		throw new IllegalArgumentException("Could not convert from Z3 expression " + exp);
+		throw new IllegalArgumentException("Could not convert from Z3 expression " + exp + "::" + exp.getClass());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -109,6 +111,12 @@ public class NodeSimplifier {
 			}
 			return new NotBooleanOperator(fromZ3(exp.getArgs()[0]));
 		}
+		if (exp.isEq()) {
+			if (exp.getArgs()[0].isInt())
+				return new EQIntegersOperator(fromZ3(exp.getArgs()[0]), fromZ3(exp.getArgs()[1]));
+			else
+				return new EQStringsOperator(fromZ3(exp.getArgs()[0]), fromZ3(exp.getArgs()[1]));
+		}
 		// x <= y == ¬ (x > y)
 		if (exp.isLE()) {
 			if (exp.getArgs()[0].isInt())
@@ -152,7 +160,7 @@ public class NodeSimplifier {
 					Boolean.valueOf(exp.toString()));
 			return new BooleanVariableAssignmentTerminal(num, true, false);
 		}
-		throw new IllegalArgumentException("Could not convert from Z3 expression " + exp);
+		throw new IllegalArgumentException("Could not convert from Z3 expression " + exp + "::" + exp.getClass());
 	}
 
 	public static Node<StringVariableAssignment> fromZ3(SeqExpr exp) {
